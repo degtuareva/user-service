@@ -1,4 +1,4 @@
-package edu.online.store;
+package edu.online.messenger;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
