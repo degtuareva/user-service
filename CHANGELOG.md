@@ -27,3 +27,5 @@
 - Глобальная обработка ошибок
 - Postman
 - PostgreSQL
+
+#### version 2.0: разработана сущность Address
