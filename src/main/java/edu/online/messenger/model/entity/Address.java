@@ -6,39 +6,39 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "address")
-@Builder
-@Table(name = "Entity", schema = "address")
+@Entity
+@NoArgsConstructor
+@Table
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @Column(name = "apartment")
+    @Column
     int apartment;
 
-    @Column(name = "housing")
+    @Column
     String housing;
 
-    @Column(name = "house", nullable = false)
+    @Column(nullable = false)
     int house;
 
-    @Column(name = "street", nullable = false)
+    @Column(nullable = false)
     String street;
 
-    @Column(name = "city", nullable = false)
+    @Column(nullable = false)
     String city;
 
-    @Column(name = "postalCode", nullable = false)
+    @Column(nullable = false)
     String postalCode;
 
-    @Column(name = "country", nullable = false)
+    @Column(nullable = false)
     String country;
 }
