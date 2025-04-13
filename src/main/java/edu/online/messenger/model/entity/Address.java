@@ -17,24 +17,24 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    private Long id;
 
-    int apartment;
+    private int apartment;
 
-    String housing;
-
-    @Column(nullable = false)
-    int house;
+    private String housing;
 
     @Column(nullable = false)
-    String street;
+    private int house;
 
     @Column(nullable = false)
-    String city;
+    private String street;
 
     @Column(nullable = false)
-    String postalCode;
+    private String city;
 
     @Column(nullable = false)
-    String country;
+    private String postalCode;
+
+    @Column(nullable = false)
+    private String country;
 }
