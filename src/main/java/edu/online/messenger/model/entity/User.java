@@ -1,15 +1,15 @@
 package edu.online.messenger.model.entity;
 
-import edu.online.messenger.entity.RoleName;
-import jakarta.persistence.Id;
+import edu.online.messenger.constant.RoleName;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
