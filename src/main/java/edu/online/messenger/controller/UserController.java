@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/users")
+@AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
     @GetMapping("existence/id/{userId}")
     public boolean exists(@PathVariable Long userId) {
-        return userService.exists(userId);
+        return userService.existsById(userId);
     }
 }

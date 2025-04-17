@@ -1,16 +1,17 @@
 package edu.online.messenger.service;
 
 import edu.online.messenger.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class UserService {
 
     private final UserRepository repository;
 
-    public boolean exists(Long id) {
+    public boolean existsById(Long id) {
         return repository.existsById(id);
     }
 }
+
