@@ -15,7 +15,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("existence/id/{userId}")
-    public boolean exists(@PathVariable Long userId) {
+    public boolean existsById(@PathVariable Long userId) {
         return userService.existsById(userId);
     }
 }
