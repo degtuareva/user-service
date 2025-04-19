@@ -4,14 +4,13 @@ import edu.online.messenger.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class UserService {
-    private UserRepository userRepository;
 
-    public boolean userExistsByLogin(String login) {
+    private final UserRepository userRepository;
 
+    public boolean existsByLogin(String login) {
         return userRepository.existsByLogin(login);
     }
-
 }
