@@ -31,12 +31,12 @@ public class User extends BaseEntity {
     @Column(length = 50, nullable = false)
     private String password;
 
-//    @Column(nullable = false)
-//    @Enumerated(EnumType.STRING)
-//    private RoleName role;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleName role;
 
     @CreationTimestamp
-    private LocalDateTime createDate;
+    private LocalDateTime createDateTime;
 
     @UpdateTimestamp
     private LocalDateTime lastVisitDate;
