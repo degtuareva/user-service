@@ -16,6 +16,7 @@ public class UserController {
 
     @GetMapping("/existence/login/{login}")
     public boolean existsByLogin(@PathVariable String login) {
+
         return userService.existsByLogin(login);
     }
 }

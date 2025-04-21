@@ -44,15 +44,17 @@
 
 ### version 4.0
 
-Разработаны UserController, UserService, UserRepository. Создан следующий эндпойнт:
+Разработаны UserController, UserService, UserRepository. Создан следующий эндпоинт:
 
 ## UserController
 
 ### Get
 
-#### Проверка наличия пользователя по login
+#### Проверка наличия пользователя по логину
 
-http://localhost:9087/api/users/existence/login/{login}
+#### Запрос:http://localhost:9087/api/users/existence/login/{login}
 
-#### boolean (true/false)
+#### Ответ: boolean (true/false)
+
 Bad request 400, если в качестве user_id переданы не валидные данные
+В случае, если пользователь не существует, никаких исключений не выбрасывается
