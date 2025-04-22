@@ -41,3 +41,12 @@
 ### version 3.0
 
 Добавлена модель User
+
+### version 4.0
+Разработаны UserController, UserService, UserRepository. Создан следующий эндпойнт:
+## UserController 
+### Get
+#### Проверка наличия пользователя по id
+http://localhost:9087/api/users/existence/id/{user_id}
+#### boolean (true/false)
+Bad request 400, если в качестве user_id переданы не валидные данные
