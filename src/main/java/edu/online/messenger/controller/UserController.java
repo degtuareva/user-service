@@ -25,6 +25,8 @@ public class UserController {
     @GetMapping("/existence/login/{login}")
     public boolean existsByLogin(@PathVariable String login) {
         return userService.existsByLogin(login);
+    }
+
     @GetMapping("/login/{login}")
     public UserDto getUserByLogin(@PathVariable String login) {
         return userMapper.mapper(userService.getUserByLogin(login));

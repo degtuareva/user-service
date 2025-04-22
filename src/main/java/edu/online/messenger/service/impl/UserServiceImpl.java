@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
-    private final UserRepository userRepository;
 
     @Override
     public boolean existsById(Long id) {
@@ -22,8 +21,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean existsByLogin(String login) {
         return repository.existsByLogin(login);
+    }
+
     public User getUserByLogin(String login) {
-        return userRepository.findByLogin(login)
+        return repository.findByLogin(login)
                 .orElseThrow(() -> new UserNotFoundException(login));
     }
 }

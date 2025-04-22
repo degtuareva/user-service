@@ -4,6 +4,8 @@ import edu.online.messenger.model.entity.User;
 
 public interface UserService {
 
-    public User getUserByLogin(String login);
+    boolean existsById(Long id);
+    boolean existsByLogin(String login);
+    User getUserByLogin(String login);
 }
 
