@@ -1,13 +1,13 @@
-package edu.online.messenger.converter;
+package edu.online.messenger.mapper;
 
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.entity.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface UserConverter {
+public interface UserMapper {
 
-    UserDto converter(User user);
+    UserDto mapper(User user);
 
-    User converter(UserDto userDto);
+    User mapper(UserDto userDto);
 }

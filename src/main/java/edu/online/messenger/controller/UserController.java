@@ -1,6 +1,6 @@
 package edu.online.messenger.controller;
 
-import edu.online.messenger.converter.UserConverter;
+import edu.online.messenger.mapper.UserMapper;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.service.UserService;
 import lombok.AllArgsConstructor;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final UserConverter userConverter;
+    private final UserMapper userMapper;
 
     @GetMapping("/login/{login}")
     public UserDto getUserByLogin(@PathVariable String login) {
-        return userConverter.converter(userService.getUserByLogin(login));
+        return userMapper.mapper(userService.getUserByLogin(login));
     }
 }
