@@ -17,9 +17,10 @@ public class UserController {
     @GetMapping("existence/id/{userId}")
     public boolean existsById(@PathVariable Long userId) {
         return userService.existsById(userId);
+    }
+
     @GetMapping("/existence/login/{login}")
     public boolean existsByLogin(@PathVariable String login) {
-
         return userService.existsByLogin(login);
     }
 }
