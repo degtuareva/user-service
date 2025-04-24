@@ -8,5 +8,6 @@ import org.mapstruct.Mapper;
 public interface UserConverter {
 
     UserDto converter(User user);
+
     User converter(UserDto userDto);
 }

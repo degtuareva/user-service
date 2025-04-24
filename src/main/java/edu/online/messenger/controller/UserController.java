@@ -1,7 +1,6 @@
 package edu.online.messenger.controller;
 
 import edu.online.messenger.converter.UserConverter;
-import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.service.UserService;
 import lombok.AllArgsConstructor;

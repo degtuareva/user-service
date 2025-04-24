@@ -4,5 +4,5 @@ import edu.online.messenger.model.entity.User;
 
 public interface UserService {
 
-     public User getUserById(Long id);
+    public User getUserById(Long id);
 }
