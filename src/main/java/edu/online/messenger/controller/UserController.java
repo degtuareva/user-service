@@ -1,13 +1,14 @@
 package edu.online.messenger.controller;
 
-import edu.online.messenger.mapper.UserMapper;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/users")
@@ -15,20 +16,22 @@ import lombok.AllArgsConstructor;
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @GetMapping("existence/id/{userId}")
+    @ResponseStatus(HttpStatus.OK)
     public boolean existsById(@PathVariable Long userId) {
         return userService.existsById(userId);
     }
 
     @GetMapping("/existence/login/{login}")
+    @ResponseStatus(HttpStatus.OK)
     public boolean existsByLogin(@PathVariable String login) {
         return userService.existsByLogin(login);
     }
 
     @GetMapping("/login/{login}")
+    @ResponseStatus(HttpStatus.OK)
     public UserDto getUserByLogin(@PathVariable String login) {
-        return userMapper.mapper(userService.getUserByLogin(login));
+        return userService.getUserDtoByLogin(login);
     }
 }

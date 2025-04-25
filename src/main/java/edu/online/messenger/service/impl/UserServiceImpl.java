@@ -1,7 +1,8 @@
 package edu.online.messenger.service.impl;
 
 import edu.online.messenger.exception.UserNotFoundException;
-import edu.online.messenger.model.entity.User;
+import edu.online.messenger.mapper.UserMapper;
+import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.repository.UserRepository;
 import edu.online.messenger.service.UserService;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+    private final UserMapper userMapper;
 
     @Override
     public boolean existsById(Long id) {
@@ -23,8 +25,8 @@ public class UserServiceImpl implements UserService {
         return repository.existsByLogin(login);
     }
 
-    public User getUserByLogin(String login) {
-        return repository.findByLogin(login)
-                .orElseThrow(() -> new UserNotFoundException(login));
+    public UserDto getUserDtoByLogin(String login) {
+        return userMapper.toDto(repository.findByLogin(login)
+                .orElseThrow(() -> new UserNotFoundException(login)));
     }
 }

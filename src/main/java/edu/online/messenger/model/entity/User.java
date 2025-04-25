@@ -36,7 +36,7 @@ public class User extends BaseEntity {
     private RoleName role;
 
     @CreationTimestamp
-    private LocalDateTime createDateTime;
+    private LocalDateTime createDate;
 
     @UpdateTimestamp
     private LocalDateTime lastVisitDate;
