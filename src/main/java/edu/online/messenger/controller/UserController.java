@@ -13,9 +13,12 @@ public class UserController {
 
     private final UserService userService;
 
+    /*
+     * GET:http://localhost/api/users/1
+     */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUserById(@PathVariable Long id) {
-        return userService.getUserDtoById(id);
+    public UserDto getUserById(@PathVariable ("id") Long id) {
+        return  userService.getUserById(id);
     }
 }
