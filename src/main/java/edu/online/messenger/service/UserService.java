@@ -1,8 +1,8 @@
 package edu.online.messenger.service;
 
-import edu.online.messenger.model.entity.User;
+import edu.online.messenger.model.dto.UserDto;
 
 public interface UserService {
 
-    public User getUserById(Long id);
+    UserDto getUserDtoById(Long id);
 }
