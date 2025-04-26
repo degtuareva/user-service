@@ -1,6 +1,7 @@
 package edu.online.messenger.model.entity;
 
 import edu.online.messenger.constant.RoleName;
+import edu.online.messenger.model.entity.parent.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,13 +15,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name="users")
 @NoArgsConstructor
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "users")
+public class User extends BaseEntity {
 
     @Column(length = 50, nullable = false, unique = true)
     private String login;

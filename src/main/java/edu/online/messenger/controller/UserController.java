@@ -18,7 +18,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUserById(@PathVariable ("id") Long id) {
-        return  userService.getUserById(id);
+    public UserDto getUserById(@PathVariable("id") Long id) {
+        return userService.getUserById(id);
     }
 }
