@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'edu.online.messenger'
-version '4.0'
+version '7.0'
 
 repositories {
     mavenLocal()
