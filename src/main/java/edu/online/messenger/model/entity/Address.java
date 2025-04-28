@@ -19,7 +19,7 @@ public class Address extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private int apartment;
+    private Integer apartment;
 
     private String housing;
 

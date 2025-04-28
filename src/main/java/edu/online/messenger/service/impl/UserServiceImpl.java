@@ -5,6 +5,7 @@ import edu.online.messenger.mapper.UserMapper;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.repository.UserRepository;
 import edu.online.messenger.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +26,21 @@ public class UserServiceImpl implements UserService {
         return repository.existsByLogin(login);
     }
 
+    @Override
     public UserDto getUserDtoByLogin(String login) {
         return userMapper.toDto(repository.findByLogin(login)
                 .orElseThrow(() -> new UserNotFoundException(login)));
     }
 
+    @Override
     public UserDto getUserById(Long id) {
         return userMapper.toDto(repository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id)));
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserById(Long id) {
+        repository.deleteById(id);
     }
 }
