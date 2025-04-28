@@ -9,5 +9,7 @@ public interface UserService {
     boolean existsByLogin(String login);
 
     UserDto getUserDtoByLogin(String login);
+
+    UserDto getUserById(Long id);
 }
 

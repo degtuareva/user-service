@@ -34,4 +34,10 @@ public class UserController {
     public UserDto getUserByLogin(@PathVariable String login) {
         return userService.getUserDtoByLogin(login);
     }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
 }

@@ -29,4 +29,9 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(repository.findByLogin(login)
                 .orElseThrow(() -> new UserNotFoundException(login)));
     }
+
+    public UserDto getUserById(Long id) {
+        return userMapper.toDto(repository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id)));
+    }
 }
