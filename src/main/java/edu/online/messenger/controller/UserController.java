@@ -55,4 +55,6 @@ public class UserController {
     public List<AddressDto> getUserAddresses(@PathVariable Long userId) {
         return userService.getAddressesByUserId(userId);
     }
+
 }
+

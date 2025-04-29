@@ -1,6 +1,10 @@
 package edu.online.messenger.service;
 
+import edu.online.messenger.model.dto.AddressCreateDto;
+import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.UserDto;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -13,5 +17,11 @@ public interface UserService {
     UserDto getUserById(Long id);
 
     void deleteUserById(Long id);
+
+    List<AddressDto> getAddressesByUserId(Long userId);
 }
+
+
+
+
 
