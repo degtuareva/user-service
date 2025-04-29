@@ -1,5 +1,6 @@
 package edu.online.messenger.controller;
 
+import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.service.UserService;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -47,5 +50,9 @@ public class UserController {
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/address/{userId}")
+    public List<AddressDto> getUserAddresses(@PathVariable Long userId) {
+        return userService.getAddressesByUserId(userId);
     }
 }
