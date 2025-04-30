@@ -178,43 +178,14 @@ http://localhost:9087/api/users/6
 
 ## UserRepository
 
-#### Разработан API по привязке адреса к пользователю. На входе AddressCreateDto, на выходе AddressDto.
+#### Разработан API по удалению пользователя по id. На входе id пользователя, на выходе ничего нет.
 
 #### Запрос:
 
-POST-запрос -
 
 ```http request
-
-http://localhost:9082/api/users/address
-
-Тело запроса:
-{
-  "userId": 4,
-  "apartment": 45,
-  "housing": "",
-  "house": 89,
-  "street": "street_three",
-  "city": "city_two",
-  "postalCode": "kki980",
-  "country": "country_two"
-}
+DELETE-запрос - 
+http://localhost:9087/api/users/6
 ```
 
-#### Ответ:
-
-```
-{
-  "id": 7,
-  "userId": 4,
-  "apartment": 45,
-  "housing": "",
-  "house": 89,
-  "street": "street_three",
-  "city": "city_two",
-  "postalCode": "kki980",
-  "country": "country_two"
-}
-```
-
-##### Если пользователь не найден,выбрасывается исключение UserNotFoundException
+##### Ответ - 204 код 
