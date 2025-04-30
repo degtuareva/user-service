@@ -161,6 +161,60 @@ http://localhost:9087/api/users/6
 ```
 
 #### Ответ:
+
 204 No Content
 
 ##### Исключений в данном эндпоинте не предусмотрено
+
+### version 9.0
+
+Создан следующий эндпойнт:
+
+## UserController
+
+## UserService
+
+## UserConverter
+
+## UserRepository
+
+#### Разработан API по привязке адреса к пользователю. На входе AddressCreateDto, на выходе AddressDto.
+
+#### Запрос:
+
+POST-запрос -
+
+```http request
+
+http://localhost:9082/api/users/address
+
+Тело запроса:
+{
+  "userId": 4,
+  "apartment": 45,
+  "housing": "",
+  "house": 89,
+  "street": "street_three",
+  "city": "city_two",
+  "postalCode": "kki980",
+  "country": "country_two"
+}
+```
+
+#### Ответ:
+
+```
+{
+  "id": 7,
+  "userId": 4,
+  "apartment": 45,
+  "housing": "",
+  "house": 89,
+  "street": "street_three",
+  "city": "city_two",
+  "postalCode": "kki980",
+  "country": "country_two"
+}
+```
+
+##### Если пользователь не найден,выбрасывается исключение UserNotFoundException
