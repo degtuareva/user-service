@@ -164,3 +164,50 @@ http://localhost:9087/api/users/6
 204 No Content
 
 ##### Исключений в данном эндпоинте не предусмотрено
+
+### version 9.0
+
+Создан следующий эндпойнт:
+
+## UserController
+
+### POST
+
+#### Привязка адреса к пользователю. На входе AddressCreateDto, на выходе AddressDto.
+
+#### Запрос:
+
+```http request
+http://localhost:9087/api/users/address
+```
+
+#### Тело запроса
+```json
+{
+  "userId": 4,
+  "apartment": 45,
+  "housing": "",
+  "house": 89,
+  "street": "street_three",
+  "city": "city_two",
+  "postalCode": "kki980",
+  "country": "country_two"
+}
+```
+#### Ответ:
+```json
+{
+"id": 7,
+"userId": 4,
+"apartment": 45,
+"housing": "",
+"house": 89,
+"street": "street_three",
+"city": "city_two",
+"postalCode": "kki980",
+"country": "country_two"
+}
+```
+##### Возможные исключения:
+В приходящем dto по userId мы проверяем, существует ли пользователь с таким id, если он
+не найден то выбрасываем исключение UserNotFoundException.
