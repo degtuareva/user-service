@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(repository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id)));
     }
+
     @Override
     @Transactional
     public void deleteUserById(Long id) {

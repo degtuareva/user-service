@@ -161,6 +161,84 @@ http://localhost:9087/api/users/6
 ```
 
 #### Ответ:
+
 204 No Content
 
 ##### Исключений в данном эндпоинте не предусмотрено
+
+### version 10.0
+
+Создан следующий эндпойнт:
+
+## UserController
+
+### POST
+
+#### Разработан API по получению всех адресов,
+
+#### привязанных к пользователю, по его id. На входе id пользователя, на выходе List<AddressDto>
+
+#### Запрос:
+
+```http request
+http://localhost:9087/api/users/address/2
+```
+
+#### Тело запроса
+
+отсутствует
+
+```
+#### Ответ:
+```json
+ {
+        "id": 1,
+        "userId": 2,
+        "apartment": 0,
+        "housing": "",
+        "house": 5,
+        "street": "osipova",
+        "city": "grodno",
+        "postalCode": "246758",
+        "country": "Беларусь"
+    },
+    {
+        "id": 2,
+        "userId": 2,
+        "apartment": 0,
+        "housing": "",
+        "house": 5,
+        "street": "osipova",
+        "city": "grodno",
+        "postalCode": "246758",
+        "country": "Беларусь"
+    },
+    {
+        "id": 3,
+        "userId": 2,
+        "apartment": 0,
+        "housing": "",
+        "house": 5,
+        "street": "osipova",
+        "city": "grodno",
+        "postalCode": "246758",
+        "country": "Беларусь"
+    },
+    {
+        "id": 4,
+        "userId": 2,
+        "apartment": 0,
+        "housing": "",
+        "house": 5,
+        "street": "osipova",
+        "city": "grodno",
+        "postalCode": "246758",
+        "country": "Беларусь"
+    }
+}
+```
+
+##### Возможные исключения:
+
+В случае, если пользователь не существует, никаких исключений выбрасываться не должно.
+Так же как и если возвращаемый список пустой.
