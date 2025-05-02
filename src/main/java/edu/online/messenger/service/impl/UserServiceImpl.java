@@ -2,7 +2,10 @@ package edu.online.messenger.service.impl;
 
 import edu.online.messenger.exception.UserNotFoundException;
 import edu.online.messenger.mapper.UserMapper;
+import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.UserDto;
+import edu.online.messenger.model.entity.Address;
+import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
 import edu.online.messenger.service.UserService;
@@ -45,16 +48,88 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
         repository.deleteById(id);
     }
-
     @Override
     @Transactional
-    public void unbindAddressById(Long addressId) {
-        if (addressId == null) {
-            return; // никаких исключений
+    public void removeAddressFromUser(AddressCreateDto addressCreateDto) {
+        Long addressId = addressCreateDto.getId(); // предполагается, что в DTO есть id адреса
+        Long userId = (long) addressCreateDto.getUserId();
+
+        // Проверяем, что адрес существует и принадлежит пользователю
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new IllegalArgumentException("Address not found"));
+
+        if (!address.getUser().getId().equals(userId)) {
+            // Адрес не принадлежит пользователю, ничего не делаем или логируем
+            return;
         }
-        addressRepository.findById(addressId).ifPresent(address -> {
-            address.setUser(null); // отвязываем пользователя
-            addressRepository.save(address);
-        });
+
+        // Отвязываем адрес от пользователя (или удаляем адрес)
+        address.setUser(null);
+        addressRepository.delete(address);
     }
+
 }
+
+//    **Разработать API по отвязке адреса от пользователя.
+//    На входе AddressCreateDto, на выходе ничего нет.**
+//
+//            - Материал для работы
+//
+//    https://www.baeldung.com/spring-controller-vs-restcontroller
+//
+//    https://www.baeldung.com/spring-requestmapping
+//
+//    https://javarush.com/quests/lectures/questspring.level04.lecture16
+//
+//    https://www.baeldung.com/spring-response-status
+//
+//    https://habr.com/ru/articles/500572/
+//
+//    https://www.baeldung.com/spring-mvc-tutorial
+//
+//    https://sky.pro/media/raznicza-mezhdu-requestparam-i-pathvariable-v-java/
+//
+//    https://www.geeksforgeeks.org/spring-boot-jparepository-with-example/
+//
+//    https://habr.com/ru/articles/682362/
+//
+//
+//    Все необходимые модели и dto уже присутствуют в проекте.
+//
+//    В данную задачу входит разработка методов контроллера, сервиса и репозитория, т.е все необходимое для функционирования эндпоинта.
+//
+//            1. **Контроллер**
+//
+//            *UserController* (корневой контекстный путь - /api/users).
+//
+//    Необходимо разработать если его еще нет.
+//
+//            2. **Сервис**
+//
+//            *UserService*.
+//
+//    Не должен выбрасывать никаких исключений.
+//
+//    Не забываем про транзакции.
+//
+//            3. **Репозиторий**:
+//
+//    UserRepository.
+//
+//    Должен быть разработан на основе JpaRepository (если он еще не был разработан).
+//
+//
+//            **Пример**:
+//
+//    DELETE-запрос - http://localhost:9082/api/users/address/7
+//
+//    Ответ - 204 код
+//
+//    После завершения задачи в файле CHANGELOG[.](http://README.MD)md необходимо кратко описать разработанный эндпоинт в формате :
+//
+//            > ## Контроллер → ### Вид запроса(Get, Post …) → #### Суть эндпоинта (получение по id …) → Запрос (http://…) →  Тело запроса (если есть) → Ответ → Возможные исключения (если есть)
+//            >
+//
+
+
+
