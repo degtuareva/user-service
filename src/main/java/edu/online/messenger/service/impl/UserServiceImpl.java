@@ -58,6 +58,6 @@ public class UserServiceImpl implements UserService {
         List<Address> addresses = addressRepository.findByUserId(userId);
         return addresses.stream()
                 .map(addressMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
