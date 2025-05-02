@@ -15,6 +15,6 @@ public interface UserService {
 
     void deleteUserById(Long id);
 
-    void removeAddressFromUser(AddressCreateDto addressCreateDto);
+    void removeAddress(AddressCreateDto addressCreateDto);
 }
 

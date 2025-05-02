@@ -166,26 +166,54 @@ http://localhost:9087/api/users/6
 
 ##### Исключений в данном эндпоинте не предусмотрено
 
-### version 9.0
+### version 11.0
 
 Создан следующий эндпойнт:
 
 ## UserController
 
-## UserService
+### Delete
 
-## UserConverter
-
-## UserRepository
-
-#### Разработан API по удалению пользователя по id. На входе id пользователя, на выходе ничего нет.
+#### Отвязка адреса от пользователя, на входе AddressCreateDto, на выходе ничего нет.
 
 #### Запрос:
 
-
 ```http request
-DELETE-запрос - 
-http://localhost:9087/api/users/6
+DELETE-запрос -
+http: http://localhost:9082/api/users/address/7
 ```
 
-##### Ответ - 204 код 
+#### Тело запроса
+
+```json
+{
+  "userId": 4,
+  "apartment": 45,
+  "housing": "",
+  "house": 89,
+  "street": "street_three",
+  "city": "city_two",
+  "postalCode": "kki980",
+  "country": "country_two"
+}
+```
+
+#### Ответ:
+
+```json
+{
+  "id": 7,
+  "userId": 4,
+  "apartment": 45,
+  "housing": "",
+  "house": 89,
+  "street": "street_three",
+  "city": "city_two",
+  "postalCode": "kki980",
+  "country": "country_two"
+}
+```
+
+##### Ответ - 204 код
+
+##### Исключений в данном эндпоинте не предусмотрено

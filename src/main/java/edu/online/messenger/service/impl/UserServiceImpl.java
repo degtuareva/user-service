@@ -4,14 +4,13 @@ import edu.online.messenger.exception.UserNotFoundException;
 import edu.online.messenger.mapper.UserMapper;
 import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.UserDto;
-import edu.online.messenger.model.entity.Address;
-import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
 import edu.online.messenger.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @AllArgsConstructor
@@ -48,27 +47,17 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
         repository.deleteById(id);
     }
-    @Override
+
+
     @Transactional
-    public void removeAddressFromUser(AddressCreateDto addressCreateDto) {
-        Long addressId = addressCreateDto.getId(); // предполагается, что в DTO есть id адреса
-        Long userId = (long) addressCreateDto.getUserId();
-
-        // Проверяем, что адрес существует и принадлежит пользователю
-        Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new IllegalArgumentException("Address not found"));
-
-        if (!address.getUser().getId().equals(userId)) {
-            // Адрес не принадлежит пользователю, ничего не делаем или логируем
-            return;
+    public void removeAddress(@PathVariable AddressCreateDto addressCreateDto) {
+        Long addressId = addressCreateDto.getId();
+        if (addressId != null && addressRepository.existsById(addressId)) {
+            addressRepository.deleteById(addressId);
         }
-
-        // Отвязываем адрес от пользователя (или удаляем адрес)
-        address.setUser(null);
-        addressRepository.delete(address);
     }
-
 }
+
 
 //    **Разработать API по отвязке адреса от пользователя.
 //    На входе AddressCreateDto, на выходе ничего нет.**

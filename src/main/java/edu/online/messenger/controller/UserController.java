@@ -7,6 +7,7 @@ import edu.online.messenger.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -46,9 +47,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/address/{id}")
+    @DeleteMapping("/address")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeAddress(@RequestBody AddressCreateDto addressCreateDto) {
-        userService.removeAddressFromUser(addressCreateDto);
+    public void removeAddressFromUser(@RequestBody AddressCreateDto addressCreateDto) {
+        userService.removeAddress(addressCreateDto);
     }
 }
