@@ -10,6 +10,5 @@ public interface AddressMapper {
 
     @Mapping(source = "user.id", target = "userId")
     AddressDto toDto(Address address);
-
 }
 
