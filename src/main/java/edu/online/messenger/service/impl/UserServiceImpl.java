@@ -3,8 +3,13 @@ package edu.online.messenger.service.impl;
 import edu.online.messenger.exception.UserNotFoundException;
 import edu.online.messenger.mapper.AddressMapper;
 import edu.online.messenger.mapper.UserMapper;
+import edu.online.messenger.model.dto.AddressCreateDto;
+import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.UserDto;
+import edu.online.messenger.model.entity.Address;
+import edu.online.messenger.model.entity.User;
+import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
@@ -20,37 +25,51 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
     private final UserMapper userMapper;
+    private final AddressMapper addressMapper;
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
 
     @Override
     public boolean existsById(Long id) {
-        return repository.existsById(id);
+        return userRepository.existsById(id);
     }
 
     @Override
     public boolean existsByLogin(String login) {
-        return repository.existsByLogin(login);
+        return userRepository.existsByLogin(login);
     }
 
     @Override
     public UserDto getUserDtoByLogin(String login) {
-        return userMapper.toDto(repository.findByLogin(login)
+        return userMapper.toDto(userRepository.findByLogin(login)
                 .orElseThrow(() -> new UserNotFoundException(login)));
     }
 
     @Override
     public UserDto getUserById(Long id) {
-        return userMapper.toDto(repository.findById(id)
+        return userMapper.toDto(userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id)));
     }
 
     @Override
     @Transactional
     public void deleteUserById(Long id) {
-        repository.deleteById(id);
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public AddressDto addAddressToUser(AddressCreateDto addressCreateDto) {
+        Long userId = (long) addressCreateDto.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        Address address = addressMapper.toEntity(addressCreateDto);
+        address.setUser(user);
+        Address savedAddress = addressRepository.save(address);
+        return addressMapper.toDto(savedAddress);
     }
 
     @Override
