@@ -6,6 +6,7 @@ import edu.online.messenger.mapper.UserMapper;
 import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.UserDto;
+import edu.online.messenger.model.dto.UserInfoDto;
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
@@ -52,6 +53,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public UserDto createUser(UserInfoDto userInfoDto) {
+        User createdUser = userRepository.save(userMapper.toUser(userInfoDto));
+        return userMapper.toDto(createdUser);
     }
 
     @Override

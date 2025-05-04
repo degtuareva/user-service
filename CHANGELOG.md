@@ -288,3 +288,46 @@ http://localhost:9087/api/users/address/2
 
 В случае, если пользователь не существует, никаких исключений выбрасываться не должно.
 Так же как и если возвращаемый список пустой.
+
+### version 11.0
+
+Создан следующий эндпоинт
+
+## UserController
+
+### Post
+
+#### Создание нового пользователя. На входе UserInfoDto пользователя, на выходе UserDto.
+
+#### Запрос
+
+```http request
+http://localhost:9082/api/users
+```
+
+#### Тело запроса
+
+```json
+{
+  "login": "user_7@gmail.com",
+  "password": "user_7@gmail.com",
+  "role": "USER"
+}
+```
+
+#### Ответ
+
+```json
+{
+  "id": 12,
+  "login": "user_7@gmail.com",
+  "password": "user_7@gmail.com",
+  "role": "USER",
+  "createDate": "2025-01-26T21:43:35.854829",
+  "lastVisitDate": "2025-01-26T21:43:35.854858"
+}
+```
+
+#### Возможные исключения
+
+Никаких исключений выбрасываться не должно
