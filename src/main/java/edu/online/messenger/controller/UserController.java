@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 @AllArgsConstructor
@@ -58,5 +60,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDto addUserAddress(@Valid @RequestBody AddressCreateDto addressCreateDto) {
         return userService.addAddressToUser(addressCreateDto);
+    }
+
+    @GetMapping("/address/{userId}")
+    public List<AddressDto> getUserAddresses(@PathVariable Long userId) {
+        return userService.getAddressesByUserId(userId);
     }
 }

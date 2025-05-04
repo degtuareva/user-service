@@ -4,6 +4,8 @@ import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.UserDto;
 
+import java.util.List;
+
 public interface UserService {
 
     boolean existsById(Long id);
@@ -17,5 +19,7 @@ public interface UserService {
     void deleteUserById(Long id);
 
     AddressDto addAddressToUser(AddressCreateDto addressCreateDto);
+
+    List<AddressDto> getAddressesByUserId(Long userId);
 }
 

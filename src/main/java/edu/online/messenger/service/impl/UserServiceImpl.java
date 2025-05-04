@@ -15,6 +15,8 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -62,5 +64,13 @@ public class UserServiceImpl implements UserService {
         address.setUser(user);
         Address savedAddress = addressRepository.save(address);
         return addressMapper.toDto(savedAddress);
+    }
+
+    @Override
+    public List<AddressDto> getAddressesByUserId(Long userId) {
+        List<Address> addresses = addressRepository.findByUserId(userId);
+        return addresses.stream()
+                .map(addressMapper::toDto)
+                .toList();
     }
 }
