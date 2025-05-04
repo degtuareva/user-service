@@ -2,7 +2,6 @@ package edu.online.messenger.service.impl;
 
 import edu.online.messenger.exception.UserNotFoundException;
 import edu.online.messenger.mapper.UserMapper;
-import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
@@ -52,12 +51,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void removeAddressById(Long id) {
-        addressRepository.findById(id).ifPresent(address -> {
-            address.setUser(null); // Отвязываем пользователя
-            addressRepository.save(address);
-        });
-        }
+
+        addressRepository.findById(id).ifPresent(addressRepository::delete);
     }
-
-
-
+}

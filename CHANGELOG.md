@@ -183,36 +183,9 @@ DELETE-запрос -
 http: http://localhost:9082/api/users/address/7
 ```
 
-#### Тело запроса
-
-```json
-{
-  "userId": 4,
-  "apartment": 45,
-  "housing": "",
-  "house": 89,
-  "street": "street_three",
-  "city": "city_two",
-  "postalCode": "kki980",
-  "country": "country_two"
-}
-```
+#### Тело запроса-отсутствует
 
 #### Ответ:
-
-```json
-{
-  "id": 7,
-  "userId": 4,
-  "apartment": 45,
-  "housing": "",
-  "house": 89,
-  "street": "street_three",
-  "city": "city_two",
-  "postalCode": "kki980",
-  "country": "country_two"
-}
-```
 
 ##### Ответ - 204 код
 
