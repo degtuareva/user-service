@@ -1,13 +1,11 @@
 package edu.online.messenger.controller;
 
 import edu.online.messenger.model.dto.AddressCreateDto;
-import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
