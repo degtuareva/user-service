@@ -5,15 +5,27 @@ import edu.online.messenger.mapper.AddressMapper;
 import edu.online.messenger.mapper.UserMapper;
 import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;
+import edu.online.messenger.model.dto.AddressFilterDto;
+import edu.online.messenger.model.dto.PageContentDto;
+import edu.online.messenger.model.dto.PageDto;
+import edu.online.messenger.model.dto.PageParamDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
 import edu.online.messenger.service.UserService;
+import edu.online.messenger.util.AddressSpecification;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -62,5 +74,28 @@ public class UserServiceImpl implements UserService {
         address.setUser(user);
         Address savedAddress = addressRepository.save(address);
         return addressMapper.toDto(savedAddress);
+    }
+
+    @Override
+    public PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
+        Pageable pageable = PageRequest.of(pageParamDto.getPageNumber() - 1, pageParamDto.getPageSize());
+        Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
+        Page<Address> addresses = addressRepository.findAll(spec, pageable);
+        return convertToPageContentDto(addresses);
+    }
+
+    private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
+        List<Address> addressList = page.getContent();
+        List<UserDto> userDtoList = new ArrayList<>();
+        for (Address address : addressList) {
+            UserDto dto = userMapper.toDto(address.getUser());
+            userDtoList.add(dto);
+        }
+        PageDto pageDto = new PageDto(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements());
+        return new PageContentDto<>(pageDto, userDtoList);
     }
 }

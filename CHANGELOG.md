@@ -161,6 +161,7 @@ http://localhost:9087/api/users/6
 ```
 
 #### Ответ:
+
 204 No Content
 
 ##### Исключений в данном эндпоинте не предусмотрено
@@ -182,6 +183,7 @@ http://localhost:9087/api/users/address
 ```
 
 #### Тело запроса
+
 ```json
 {
   "userId": 4,
@@ -194,20 +196,92 @@ http://localhost:9087/api/users/address
   "country": "country_two"
 }
 ```
+
 #### Ответ:
+
 ```json
 {
-"id": 7,
-"userId": 4,
-"apartment": 45,
-"housing": "",
-"house": 89,
-"street": "street_three",
-"city": "city_two",
-"postalCode": "kki980",
-"country": "country_two"
+  "id": 7,
+  "userId": 4,
+  "apartment": 45,
+  "housing": "",
+  "house": 89,
+  "street": "street_three",
+  "city": "city_two",
+  "postalCode": "kki980",
+  "country": "country_two"
 }
 ```
+
 ##### Возможные исключения:
+
 В приходящем dto по userId мы проверяем, существует ли пользователь с таким id, если он
 не найден то выбрасываем исключение UserNotFoundException.
+
+### version 11.0
+
+Создан следующий эндпойнт:
+
+## UserController
+
+### GET
+
+#### Получение пользователей с возможностью пагинации и фильтрации по адресным данным.
+
+На входе: pageNumber, pageSize, country, postalCode, city, street, house, housing, apartment  
+На выходе: PageContentDto<UserDto>.
+
+#### Запрос:
+
+```http request
+http://localhost:9087/api/users
+```
+
+#### Ответ:
+
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 5
+  },
+  "content": [
+    {
+      "id": 2,
+      "login": "admin_1@gmail.com",
+      "password": "$2a$10$07t5cgkYwoWv44L/HOmoMOstGKQm2kfFjT07a14NYcnQ987QqksRe",
+      "role": "ADMIN",
+      "createDate": "2025-01-10T18:05:49.444372",
+      "lastVisitDate": "2025-01-10T18:05:49.444438"
+    },
+    {
+      "id": 3,
+      "login": "admin_2@gmail.com",
+      "password": "$2a$10$UGKdzLjoPulUesY4o.rwm.c..yuQMIrQIk2L1MA.g9mzqy.Vg5Txq",
+      "role": "ADMIN",
+      "createDate": "2025-01-10T18:05:58.764599",
+      "lastVisitDate": "2025-01-10T18:05:58.764639"
+    },
+    {
+      "id": 4,
+      "login": "user_1@gmail.com",
+      "password": "$2a$10$/Z.pZ22wI6vxLD9/L8.D.OgKO57m2dsqRUOgtMDIloc3eQHB1IKLW",
+      "role": "USER",
+      "createDate": "2025-01-10T18:06:17.926168",
+      "lastVisitDate": "2025-01-10T18:06:17.926202"
+    },
+    {
+      "id": 5,
+      "login": "user_2@gmail.com",
+      "password": "$2a$10$9UAR98lahbyxK.w22PpJpufSBWiTQDjPQA2KXnfz6kgKOtJtdP3u2",
+      "role": "USER",
+      "createDate": "2025-01-10T18:06:25.192185",
+      "lastVisitDate": "2025-01-10T18:06:25.192237"
+    }
+  ]
+}
+```
+
+##### Исключений в данном эндпоинте не предусмотрено
