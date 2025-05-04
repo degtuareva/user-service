@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -48,17 +49,15 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
     @Transactional
-    public void removeAddress(AddressCreateDto addressCreateDto) {
-        Long addressId = addressCreateDto.getId();
-        if (addressId != null) {
-            addressRepository.findById(addressId).ifPresent(address -> {
-                address.setUser(null);
-                addressRepository.save(address);
-            });
+    public void removeAddressById(Long id) {
+        addressRepository.findById(id).ifPresent(address -> {
+            address.setUser(null); // Отвязываем пользователя
+            addressRepository.save(address);
+        });
         }
     }
-}
 
 
 

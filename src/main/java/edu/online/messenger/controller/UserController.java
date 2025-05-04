@@ -1,6 +1,5 @@
 package edu.online.messenger.controller;
 
-import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.service.UserService;
 import lombok.AllArgsConstructor;
@@ -45,9 +44,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/address")
+    @DeleteMapping("/address/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeAddressFromUser(@RequestBody AddressCreateDto addressCreateDto) {
-        userService.removeAddress(addressCreateDto);
+    public void removeAddressFromUser(@PathVariable Long id ) {
+        userService.removeAddressById(id);
     }
 }
