@@ -19,7 +19,7 @@ public interface UserService {
 
     void deleteUserById(Long id);
 
-    UserDto createUser(UserInfoDto userInfoDto);
+    UserDto saveUser(UserInfoDto userInfoDto);
 
     AddressDto addAddressToUser(AddressCreateDto addressCreateDto);
 

@@ -59,8 +59,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto addUser(@Valid @RequestBody UserInfoDto userInfoDto) {
-        return userService.createUser(userInfoDto);
+    public UserDto saveUser(@Valid @RequestBody UserInfoDto userInfoDto) {
+        return userService.saveUser(userInfoDto);
     }
 
     @PostMapping("/address")
