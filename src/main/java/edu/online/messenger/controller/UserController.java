@@ -3,6 +3,7 @@ package edu.online.messenger.controller;
 import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.UserDto;
+import edu.online.messenger.model.dto.UserInfoDto;
 import edu.online.messenger.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,12 @@ public class UserController {
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto saveUser(@Valid @RequestBody UserInfoDto userInfoDto) {
+        return userService.saveUser(userInfoDto);
     }
 
     @PostMapping("/address")
