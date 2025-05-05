@@ -1,13 +1,13 @@
 package edu.online.messenger.util;
 
-import edu.online.messenger.model.dto.AddressFilterDto;
 import edu.online.messenger.model.entity.Address;
+import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 @UtilityClass
-public class AddressSpecification<E> {
+public class AddressSpecification {
 
     public static Specification<Address> findAll(AddressFilterDto filter) {
 
@@ -36,31 +36,31 @@ public class AddressSpecification<E> {
         return spec;
     }
 
-    public static Specification<Address> findByCountry(String country) {
+    private static Specification<Address> findByCountry(String country) {
         return (address, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(address.get("country"), country);
     }
 
-    public static Specification<Address> findByPostalCode(String postalCode) {
+    private static Specification<Address> findByPostalCode(String postalCode) {
         return (address, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(address.get("postalCode"), postalCode);
     }
 
-    public static Specification<Address> findByCity(String city) {
+    private static Specification<Address> findByCity(String city) {
         return (address, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(address.get("city"), city);
     }
 
-    public static Specification<Address> findByStreet(String street) {
+    private static Specification<Address> findByStreet(String street) {
         return (address, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(address.get("street"), street);
     }
 
-    public static Specification<Address> findByHouse(String house) {
+    private static Specification<Address> findByHouse(String house) {
         return (address, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(address.get("house"), house);
     }
 
-    public static Specification<Address> findByHousing(String housing) {
+    private static Specification<Address> findByHousing(String housing) {
         return (address, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(address.get("housing"), housing);
     }
 
-    public static Specification<Address> findByApartment(String apartment) {
+    private static Specification<Address> findByApartment(String apartment) {
         return (address, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(address.get("apartment"), apartment);
     }
 }

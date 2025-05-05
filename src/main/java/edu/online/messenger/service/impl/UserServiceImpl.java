@@ -5,13 +5,13 @@ import edu.online.messenger.mapper.AddressMapper;
 import edu.online.messenger.mapper.UserMapper;
 import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;
-import edu.online.messenger.model.dto.AddressFilterDto;
 import edu.online.messenger.model.dto.PageContentDto;
 import edu.online.messenger.model.dto.PageDto;
 import edu.online.messenger.model.dto.PageParamDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
+import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
 import edu.online.messenger.service.UserService;
@@ -24,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -76,6 +75,11 @@ public class UserServiceImpl implements UserService {
         return addressMapper.toDto(savedAddress);
     }
 
+//    @Override
+//    public PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
+//        return null;
+//    }
+
     @Override
     public PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
         Pageable pageable = PageRequest.of(pageParamDto.getPageNumber() - 1, pageParamDto.getPageSize());
@@ -86,11 +90,10 @@ public class UserServiceImpl implements UserService {
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
         List<Address> addressList = page.getContent();
-        List<UserDto> userDtoList = new ArrayList<>();
-        for (Address address : addressList) {
-            UserDto dto = userMapper.toDto(address.getUser());
-            userDtoList.add(dto);
-        }
+        List<UserDto> userDtoList = addressList.stream()
+                .map(address -> userMapper.toDto(address.getUser()))
+                .distinct()
+                .toList();
         PageDto pageDto = new PageDto(
                 page.getNumber() + 1,
                 page.getSize(),

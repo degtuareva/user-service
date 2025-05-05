@@ -2,10 +2,10 @@ package edu.online.messenger.controller;
 
 import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;
-import edu.online.messenger.model.dto.AddressFilterDto;
 import edu.online.messenger.model.dto.PageContentDto;
 import edu.online.messenger.model.dto.PageParamDto;
 import edu.online.messenger.model.dto.UserDto;
+import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import edu.online.messenger.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -67,7 +67,7 @@ public class UserController {
     @GetMapping
     public PageContentDto<UserDto> getUsers(
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "1") int pageSize,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize,
             @RequestParam(value = "country", required = false) String country,
             @RequestParam(value = "postalCode", required = false) String postalCode,
             @RequestParam(value = "city", required = false) String city,

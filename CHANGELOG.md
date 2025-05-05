@@ -231,7 +231,7 @@ http://localhost:9087/api/users/address
 На входе: pageNumber, pageSize, country, postalCode, city, street, house, housing, apartment  
 На выходе: PageContentDto<UserDto>.
 
-#### Запрос:
+#### Запрос_1:
 
 ```http request
 http://localhost:9087/api/users
@@ -249,39 +249,369 @@ http://localhost:9087/api/users
   },
   "content": [
     {
-      "id": 2,
-      "login": "admin_1@gmail.com",
-      "password": "$2a$10$07t5cgkYwoWv44L/HOmoMOstGKQm2kfFjT07a14NYcnQ987QqksRe",
+      "id": 1,
+      "login": "Alex",
+      "password": "1111",
       "role": "ADMIN",
-      "createDate": "2025-01-10T18:05:49.444372",
-      "lastVisitDate": "2025-01-10T18:05:49.444438"
+      "createDate": "2025-05-05T18:00:08.533881",
+      "lastVisitDate": "2025-05-05T18:00:08.533881"
+    },
+    {
+      "id": 2,
+      "login": "Maria",
+      "password": "2222",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:48.031381",
+      "lastVisitDate": "2025-05-05T18:00:48.031381"
     },
     {
       "id": 3,
-      "login": "admin_2@gmail.com",
-      "password": "$2a$10$UGKdzLjoPulUesY4o.rwm.c..yuQMIrQIk2L1MA.g9mzqy.Vg5Txq",
-      "role": "ADMIN",
-      "createDate": "2025-01-10T18:05:58.764599",
-      "lastVisitDate": "2025-01-10T18:05:58.764639"
+      "login": "Olya",
+      "password": "3333",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:34.757179",
+      "lastVisitDate": "2025-05-05T18:01:34.757179"
     },
     {
       "id": 4,
-      "login": "user_1@gmail.com",
-      "password": "$2a$10$/Z.pZ22wI6vxLD9/L8.D.OgKO57m2dsqRUOgtMDIloc3eQHB1IKLW",
+      "login": "Leonid",
+      "password": "4444",
       "role": "USER",
-      "createDate": "2025-01-10T18:06:17.926168",
-      "lastVisitDate": "2025-01-10T18:06:17.926202"
+      "createDate": "2025-05-05T18:01:54.52683",
+      "lastVisitDate": "2025-05-05T18:01:54.52683"
     },
     {
       "id": 5,
-      "login": "user_2@gmail.com",
-      "password": "$2a$10$9UAR98lahbyxK.w22PpJpufSBWiTQDjPQA2KXnfz6kgKOtJtdP3u2",
+      "login": "Tolya",
+      "password": "5555",
       "role": "USER",
-      "createDate": "2025-01-10T18:06:25.192185",
-      "lastVisitDate": "2025-01-10T18:06:25.192237"
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
     }
   ]
 }
 ```
+#### Запрос_2:
 
+```http request
+http://localhost:9087/api/users?pageNumber=2
+```
+```json
+{
+  "page": {
+    "pageNumber": 2,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 5
+  },
+  "content": []
+}
+```
+#### Запрос_3:
+
+```http request
+http://localhost:9087/api/users?pageSize=2
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 2,
+    "totalPages": 3,
+    "totalElements": 5
+  },
+  "content": [
+    {
+      "id": 1,
+      "login": "Alex",
+      "password": "1111",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:08.533881",
+      "lastVisitDate": "2025-05-05T18:00:08.533881"
+    },
+    {
+      "id": 2,
+      "login": "Maria",
+      "password": "2222",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:48.031381",
+      "lastVisitDate": "2025-05-05T18:00:48.031381"
+    }
+  ]
+}
+```
+#### Запрос_4:
+
+```http request
+http://localhost:9087/api/users?country=usa
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 4,
+      "login": "Leonid",
+      "password": "4444",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:54.52683",
+      "lastVisitDate": "2025-05-05T18:01:54.52683"
+    }
+  ]
+}
+```
+#### Запрос_5:
+
+```http request
+http://localhost:9087/api/users?postalCode=123456
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 2,
+      "login": "Maria",
+      "password": "2222",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:48.031381",
+      "lastVisitDate": "2025-05-05T18:00:48.031381"
+    }
+  ]
+}
+```
+#### Запрос_6:
+
+```http request
+http://localhost:9087/api/users?city=chelyabinsk
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 5,
+      "login": "Tolya",
+      "password": "5555",
+      "role": "USER",
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
+    }
+  ]
+}
+```
+#### Запрос_7:
+
+```http request
+http://localhost:9087/api/users?street=kirkorova
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 2
+  },
+  "content": [
+    {
+      "id": 3,
+      "login": "Olya",
+      "password": "3333",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:34.757179",
+      "lastVisitDate": "2025-05-05T18:01:34.757179"
+    },
+    {
+      "id": 5,
+      "login": "Tolya",
+      "password": "5555",
+      "role": "USER",
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
+    }
+  ]
+}
+```
+#### Запрос_8:
+
+```http request
+http://localhost:9087/api/users?house=17
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 4,
+      "login": "Leonid",
+      "password": "4444",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:54.52683",
+      "lastVisitDate": "2025-05-05T18:01:54.52683"
+    }
+  ]
+}
+```
+#### Запрос_9:
+
+```http request
+http://localhost:9087/api/users?housing=7
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 3,
+      "login": "Olya",
+      "password": "3333",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:34.757179",
+      "lastVisitDate": "2025-05-05T18:01:34.757179"
+    }
+  ]
+}
+```
+#### Запрос_10:
+
+```http request
+http://localhost:9087/api/users?apartment=4
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 1,
+      "login": "Alex",
+      "password": "1111",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:08.533881",
+      "lastVisitDate": "2025-05-05T18:00:08.533881"
+    }
+  ]
+}
+```
+#### Запрос_11:
+
+```http request
+http://localhost:9087/api/users?street=kirkorova&house=24
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 2
+  },
+  "content": [
+    {
+      "id": 3,
+      "login": "Olya",
+      "password": "3333",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:34.757179",
+      "lastVisitDate": "2025-05-05T18:01:34.757179"
+    },
+    {
+      "id": 5,
+      "login": "Tolya",
+      "password": "5555",
+      "role": "USER",
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
+    }
+  ]
+}
+```
+#### Запрос_12:
+
+```http request
+http://localhost:9087/api/users?city=minsk&country=belarus
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 2
+  },
+  "content": [
+    {
+      "id": 1,
+      "login": "Alex",
+      "password": "1111",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:08.533881",
+      "lastVisitDate": "2025-05-05T18:00:08.533881"
+    },
+    {
+      "id": 2,
+      "login": "Maria",
+      "password": "2222",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:48.031381",
+      "lastVisitDate": "2025-05-05T18:00:48.031381"
+    }
+  ]
+}
+```
+#### Запрос_13:
+
+```http request
+http://localhost:9087/api/users?pageSize=2&pageNumber=3
+```
+```json
+{
+  "page": {
+    "pageNumber": 3,
+    "pageSize": 2,
+    "totalPages": 3,
+    "totalElements": 5
+  },
+  "content": [
+    {
+      "id": 5,
+      "login": "Tolya",
+      "password": "5555",
+      "role": "USER",
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
+    }
+  ]
+}
+```
 ##### Исключений в данном эндпоинте не предусмотрено
