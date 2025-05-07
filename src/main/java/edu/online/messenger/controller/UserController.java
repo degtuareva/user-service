@@ -73,4 +73,10 @@ public class UserController {
     public List<AddressDto> getUserAddresses(@PathVariable Long userId) {
         return userService.getAddressesByUserId(userId);
     }
+
+    @DeleteMapping("/address/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAddressFromUser(@PathVariable Long id) {
+        userService.deleteAddressById(id);
+    }
 }

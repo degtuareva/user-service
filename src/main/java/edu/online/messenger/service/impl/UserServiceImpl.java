@@ -81,4 +81,10 @@ public class UserServiceImpl implements UserService {
                 .map(addressMapper::toDto)
                 .toList();
     }
+
+    @Override
+    @Transactional
+    public void deleteAddressById(Long id) {
+        addressRepository.findById(id).ifPresent(addressRepository::delete);
+    }
 }

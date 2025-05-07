@@ -24,5 +24,6 @@ public interface UserService {
     AddressDto addAddressToUser(AddressCreateDto addressCreateDto);
 
     List<AddressDto> getAddressesByUserId(Long userId);
-}
 
+    void deleteAddressById(Long id);
+}
