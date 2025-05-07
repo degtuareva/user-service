@@ -25,6 +25,5 @@ public interface UserService {
 
     List<AddressDto> getAddressesByUserId(Long userId);
 
-
     void deleteAddressById(Long id);
 }

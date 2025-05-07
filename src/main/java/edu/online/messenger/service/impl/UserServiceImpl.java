@@ -10,7 +10,6 @@ import edu.online.messenger.model.dto.UserInfoDto;
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
-import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
 import edu.online.messenger.service.UserService;
 import jakarta.transaction.Transactional;
@@ -27,7 +26,6 @@ public class UserServiceImpl implements UserService {
     private final AddressRepository addressRepository;
     private final UserMapper userMapper;
     private final AddressMapper addressMapper;
-    private final AddressRepository addressRepository;
 
     @Override
     public boolean existsById(Long id) {
@@ -83,6 +81,7 @@ public class UserServiceImpl implements UserService {
                 .map(addressMapper::toDto)
                 .toList();
     }
+
     @Override
     @Transactional
     public void deleteAddressById(Long id) {
