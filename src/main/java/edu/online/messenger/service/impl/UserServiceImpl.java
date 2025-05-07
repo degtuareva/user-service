@@ -15,43 +15,41 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AddressRepository addressRepository;
 
     @Override
     public boolean existsById(Long id) {
-        return repository.existsById(id);
+        return userRepository.existsById(id);
     }
 
     @Override
     public boolean existsByLogin(String login) {
-        return repository.existsByLogin(login);
+        return userRepository.existsByLogin(login);
     }
 
     @Override
     public UserDto getUserDtoByLogin(String login) {
-        return userMapper.toDto(repository.findByLogin(login)
+        return userMapper.toDto(userRepository.findByLogin(login)
                 .orElseThrow(() -> new UserNotFoundException(login)));
     }
 
     @Override
     public UserDto getUserById(Long id) {
-        return userMapper.toDto(repository.findById(id)
+        return userMapper.toDto(userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id)));
     }
 
     @Override
     @Transactional
     public void deleteUserById(Long id) {
-        repository.deleteById(id);
+        userRepository.deleteById(id);
     }
-
 
     @Override
     @Transactional
-    public void removeAddressById(Long id) {
-
+    public void deleteAddressById(Long id) {
         addressRepository.findById(id).ifPresent(addressRepository::delete);
     }
 }
