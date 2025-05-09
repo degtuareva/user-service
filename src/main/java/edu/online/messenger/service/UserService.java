@@ -21,6 +21,5 @@ public interface UserService {
 
     AddressDto addAddressToUser(AddressCreateDto addressCreateDto);
 
-    PageContentDto<UserDto>getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto);
+    PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto);
 }
-

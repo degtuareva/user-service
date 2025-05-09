@@ -15,7 +15,7 @@ import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
 import edu.online.messenger.service.UserService;
-import edu.online.messenger.util.AddressSpecification;
+import edu.online.messenger.specification.AddressSpecification;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -75,11 +76,6 @@ public class UserServiceImpl implements UserService {
         return addressMapper.toDto(savedAddress);
     }
 
-//    @Override
-//    public PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
-//        return null;
-//    }
-
     @Override
     public PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
         Pageable pageable = PageRequest.of(pageParamDto.getPageNumber() - 1, pageParamDto.getPageSize());
@@ -90,10 +86,11 @@ public class UserServiceImpl implements UserService {
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
         List<Address> addressList = page.getContent();
-        List<UserDto> userDtoList = addressList.stream()
-                .map(address -> userMapper.toDto(address.getUser()))
-                .distinct()
-                .toList();
+        List<UserDto> userDtoList = new ArrayList<>();
+        for (Address address : addressList) {
+            UserDto dto = userMapper.toDto(address.getUser());
+            userDtoList.add(dto);
+        }
         PageDto pageDto = new PageDto(
                 page.getNumber() + 1,
                 page.getSize(),

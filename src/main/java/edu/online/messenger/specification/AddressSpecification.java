@@ -1,4 +1,4 @@
-package edu.online.messenger.util;
+package edu.online.messenger.specification;
 
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.dto.AddressFilterDto;
