@@ -83,7 +83,6 @@ public class UserController {
     public void deleteAddressFromUser(@PathVariable Long id) {
         userService.deleteAddressById(id);
     }
-}
 
     @GetMapping
     public PageContentDto<UserDto> getUsers(

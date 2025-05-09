@@ -25,8 +25,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +93,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void deleteAddressById(Long id) {
+        addressRepository.findById(id).ifPresent(addressRepository::delete);
+    }
+
+    @Override
     public PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
         Pageable pageable = PageRequest.of(pageParamDto.getPageNumber() - 1, pageParamDto.getPageSize());
         Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
@@ -102,12 +106,6 @@ public class UserServiceImpl implements UserService {
         return convertToPageContentDto(addresses);
     }
 
-    @Override
-    @Transactional
-    public void deleteAddressById(Long id) {
-        addressRepository.findById(id).ifPresent(addressRepository::delete);
-    }
-}
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
         List<Address> addressList = page.getContent();
         List<UserDto> userDtoList = new ArrayList<>();
