@@ -9,6 +9,7 @@ import edu.online.messenger.model.dto.PageContentDto;
 import edu.online.messenger.model.dto.PageDto;
 import edu.online.messenger.model.dto.PageParamDto;
 import edu.online.messenger.model.dto.UserDto;
+import edu.online.messenger.model.dto.UserInfoDto;
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.model.entity.dto.AddressFilterDto;
@@ -23,6 +24,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +69,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public UserDto saveUser(UserInfoDto userInfoDto) {
+        User createdUser = userRepository.save(userMapper.toUser(userInfoDto));
+        return userMapper.toDto(createdUser);
+    }
+
+    @Override
+    @Transactional
     public AddressDto addAddressToUser(AddressCreateDto addressCreateDto) {
         Long userId = (long) addressCreateDto.getUserId();
         User user = userRepository.findById(userId)
@@ -77,6 +87,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<AddressDto> getAddressesByUserId(Long userId) {
+        List<Address> addresses = addressRepository.findByUserId(userId);
+        return addresses.stream()
+                .map(addressMapper::toDto)
+                .toList();
+    }
+
+    @Override
     public PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
         Pageable pageable = PageRequest.of(pageParamDto.getPageNumber() - 1, pageParamDto.getPageSize());
         Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
@@ -84,6 +102,12 @@ public class UserServiceImpl implements UserService {
         return convertToPageContentDto(addresses);
     }
 
+    @Override
+    @Transactional
+    public void deleteAddressById(Long id) {
+        addressRepository.findById(id).ifPresent(addressRepository::delete);
+    }
+}
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
         List<Address> addressList = page.getContent();
         List<UserDto> userDtoList = new ArrayList<>();

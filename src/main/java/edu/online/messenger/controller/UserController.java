@@ -5,6 +5,7 @@ import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.PageContentDto;
 import edu.online.messenger.model.dto.PageParamDto;
 import edu.online.messenger.model.dto.UserDto;
+import edu.online.messenger.model.dto.UserInfoDto;
 import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import edu.online.messenger.service.UserService;
 import jakarta.validation.Valid;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -58,11 +61,29 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto saveUser(@Valid @RequestBody UserInfoDto userInfoDto) {
+        return userService.saveUser(userInfoDto);
+    }
+
     @PostMapping("/address")
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDto addUserAddress(@Valid @RequestBody AddressCreateDto addressCreateDto) {
         return userService.addAddressToUser(addressCreateDto);
     }
+
+    @GetMapping("/address/{userId}")
+    public List<AddressDto> getUserAddresses(@PathVariable Long userId) {
+        return userService.getAddressesByUserId(userId);
+    }
+
+    @DeleteMapping("/address/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAddressFromUser(@PathVariable Long id) {
+        userService.deleteAddressById(id);
+    }
+}
 
     @GetMapping
     public PageContentDto<UserDto> getUsers(

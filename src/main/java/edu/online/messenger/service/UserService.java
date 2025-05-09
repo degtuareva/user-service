@@ -6,6 +6,9 @@ import edu.online.messenger.model.dto.PageContentDto;
 import edu.online.messenger.model.dto.PageParamDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.entity.dto.AddressFilterDto;
+import edu.online.messenger.model.dto.UserInfoDto;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -19,7 +22,13 @@ public interface UserService {
 
     void deleteUserById(Long id);
 
+    UserDto saveUser(UserInfoDto userInfoDto);
+
     AddressDto addAddressToUser(AddressCreateDto addressCreateDto);
 
+    List<AddressDto> getAddressesByUserId(Long userId);
+
+    void deleteAddressById(Long id);
+}
     PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto);
 }
