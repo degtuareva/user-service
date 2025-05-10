@@ -25,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -99,20 +98,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
-        Pageable pageable = PageRequest.of(pageParamDto.getPageNumber() - 1, pageParamDto.getPageSize());
+    public PageContentDto<UserDto> findAll(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
+        Pageable pageable = PageRequest.of(pageParamDto.pageNumber() - 1, pageParamDto.pageSize());
         Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
         Page<Address> addresses = addressRepository.findAll(spec, pageable);
         return convertToPageContentDto(addresses);
     }
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
-        List<Address> addressList = page.getContent();
-        List<UserDto> userDtoList = new ArrayList<>();
-        for (Address address : addressList) {
-            UserDto dto = userMapper.toDto(address.getUser());
-            userDtoList.add(dto);
-        }
+        List<UserDto> userDtoList = page.getContent()
+                .stream()
+                .map(address -> userMapper.toDto(address.getUser()))
+                .toList();
         PageDto pageDto = new PageDto(
                 page.getNumber() + 1,
                 page.getSize(),

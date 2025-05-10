@@ -85,7 +85,8 @@ public class UserController {
     }
 
     @GetMapping
-    public PageContentDto<UserDto> getUsers(
+    @ResponseStatus(HttpStatus.OK)
+    public PageContentDto<UserDto> findAll(
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize,
             @RequestParam(value = "country", required = false) String country,
@@ -96,8 +97,8 @@ public class UserController {
             @RequestParam(value = "housing", required = false) String housing,
             @RequestParam(value = "apartment", required = false) String apartment
     ) {
-        PageParamDto pageParamDto = new PageParamDto(pageNumber, pageSize);
-        AddressFilterDto addressFilterDto = new AddressFilterDto(country, postalCode, city, street, house, housing, apartment);
-        return userService.getUsers(pageParamDto, addressFilterDto);
+        return userService.findAll(
+                new PageParamDto(pageNumber, pageSize),
+                new AddressFilterDto(country, postalCode, city, street, house, housing, apartment));
     }
 }

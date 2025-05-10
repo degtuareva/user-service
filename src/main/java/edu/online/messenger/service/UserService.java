@@ -30,5 +30,5 @@ public interface UserService {
 
     void deleteAddressById(Long id);
 
-    PageContentDto<UserDto> getUsers(PageParamDto pageParamDto, AddressFilterDto addressFilterDto);
+    PageContentDto<UserDto> findAll(PageParamDto pageParamDto, AddressFilterDto addressFilterDto);
 }

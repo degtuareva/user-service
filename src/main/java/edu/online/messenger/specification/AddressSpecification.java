@@ -12,26 +12,26 @@ public class AddressSpecification {
     public static Specification<Address> findAll(AddressFilterDto filter) {
 
         Specification<Address> spec = Specification.where(null);
-        if (StringUtils.isNotEmpty(filter.getCountry())) {
-            spec = spec.and(findByCountry(filter.getCountry()));
+        if (StringUtils.isNotEmpty(filter.country())) {
+            spec = spec.and(findByCountry(filter.country()));
         }
-        if (StringUtils.isNotEmpty(filter.getPostalCode())) {
-            spec = spec.and(findByPostalCode(filter.getPostalCode()));
+        if (StringUtils.isNotEmpty(filter.postalCode())) {
+            spec = spec.and(findByPostalCode(filter.postalCode()));
         }
-        if (StringUtils.isNotEmpty(filter.getCity())) {
-            spec = spec.and(findByCity(filter.getCity()));
+        if (StringUtils.isNotEmpty(filter.city())) {
+            spec = spec.and(findByCity(filter.city()));
         }
-        if (StringUtils.isNotEmpty(filter.getStreet())) {
-            spec = spec.and(findByStreet(filter.getStreet()));
+        if (StringUtils.isNotEmpty(filter.street())) {
+            spec = spec.and(findByStreet(filter.street()));
         }
-        if (StringUtils.isNotEmpty(filter.getHouse())) {
-            spec = spec.and(findByHouse(filter.getHouse()));
+        if (StringUtils.isNotEmpty(filter.house())) {
+            spec = spec.and(findByHouse(filter.house()));
         }
-        if (StringUtils.isNotEmpty(filter.getHousing())) {
-            spec = spec.and(findByHousing(filter.getHousing()));
+        if (StringUtils.isNotEmpty(filter.housing())) {
+            spec = spec.and(findByHousing(filter.housing()));
         }
-        if (StringUtils.isNotEmpty(filter.getApartment())) {
-            spec = spec.and(findByApartment(filter.getApartment()));
+        if (StringUtils.isNotEmpty(filter.apartment())) {
+            spec = spec.and(findByApartment(filter.apartment()));
         }
         return spec;
     }
