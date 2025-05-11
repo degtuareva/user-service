@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.Specification;
 public class AddressSpecification {
 
     public static Specification<Address> findAll(AddressFilterDto filter) {
-
         Specification<Address> spec = Specification.where(null);
         if (StringUtils.isNotEmpty(filter.country())) {
             spec = spec.and(findByCountry(filter.country()));
