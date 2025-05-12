@@ -13,6 +13,7 @@ import edu.online.messenger.model.dto.UserInfoDto;
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.model.entity.dto.AddressFilterDto;
+import edu.online.messenger.model.entity.parent.BaseEntity;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
 import edu.online.messenger.service.UserService;
@@ -26,6 +27,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -106,9 +109,14 @@ public class UserServiceImpl implements UserService {
     }
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
-        List<UserDto> userDtoList = page.getContent()
+        Set<Long> userIds = page.getContent()
                 .stream()
-                .map(address -> userMapper.toDto(address.getUser()))
+                .map(Address::getUser)
+                .map(BaseEntity::getId)
+                .collect(Collectors.toSet());
+        List<UserDto> userDtoList = userRepository.findAllById(userIds)
+                .stream()
+                .map(userMapper::toDto)
                 .toList();
         PageDto pageDto = new PageDto(
                 page.getNumber() + 1,
