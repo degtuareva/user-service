@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public AddressDto addAddressToUser(AddressCreateDto addressCreateDto) {
-        Long userId = (long) addressCreateDto.getUserId();
+        Long userId = addressCreateDto.getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         Address address = addressMapper.toEntity(addressCreateDto);
