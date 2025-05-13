@@ -30,75 +30,108 @@
 
 ## Версии
 
-### version 2.0
+### version 14.0
 
-Добавлена модель Address
+Создание API по получению пользователей с возможностью пагинации и фильтрации по адресным данным
 
-#### version 2.1
+### version 13.0
 
-Добавлена инкапсуляция для полей сущности Address
+Создание API по отвязке адреса от пользователя
+
+### version 12.0
+
+Создание API созданию нового пользователя
+
+### version 11.0
+
+Разработан API по получению всех адресов, привязанных к пользователю по его id
+
+### version 10.0
+
+Создание API по привязке адреса к пользователю
+
+### version 9.0
+
+Создание API удалению пользователя по id
+
+### version 8.0
+
+Создание API поиска User по id
+
+### version 7.0
+
+Создание API по получению пользователя по логину
+
+### version 6.0
+
+Создание API по проверке наличия пользователя по логину
+
+### version 5.0
+
+Создание API по проверке наличия пользователя по id
+
+### version 4.0
+
+Разработаны UserController, UserService, UserRepository
 
 ### version 3.0
 
 Добавлена модель User
 
-### version 4.0
+#### version 2.1
 
-Разработаны UserController, UserService, UserRepository. Создан следующий эндпоинт:
+Добавлена инкапсуляция для полей сущности Address
+
+### version 2.0
+
+Добавлена модель Address
+___
 
 ## UserController
 
-### Get
+### GET-запросы
 
 #### Проверка наличия пользователя по id
 
-#### Запрос:
+##### Запрос:
 
 ```http request
-http://localhost:9087/api/users/existence/id/{user_id}
+http://localhost:9087/api/users/existence/id/1
 ```
 
-#### boolean (true/false)
+##### Ответ:
+
+```
+true/false
+```
 
 Bad request 400, если в качестве user_id переданы не валидные данные
-
-### version 5.0
-
-Создан следующий эндпоинт:
-
-## UserController
-
-### Get
 
 #### Проверка наличия пользователя по логину
 
-#### Запрос:
+##### Запрос:
 
 ```http request
-http://localhost:9087/api/users/existence/login/{login}
+http://localhost:9087/api/users/existence/login/user_7@gmail.com
 ```
 
-#### Ответ: boolean (true/false)
+##### Ответ:
+
+```
+true/false
+```
 
 Bad request 400, если в качестве user_id переданы не валидные данные
 
-### version 6.0
-
-Создан следующий эндпойнт:
-
-## UserController
-
-### Get
-
 #### Получение пользователя по логину. На входе логин пользователя, на выходе UserDto.
 
-#### Запрос:
+##### Запрос:
 
 ```http request
 http://localhost:9087/api/users/login/user_1@gmail.com
 ```
 
-#### Ответ:
+##### Ответ:
 
 ```json
 {
@@ -111,25 +144,19 @@ http://localhost:9087/api/users/login/user_1@gmail.com
 }
 ```
 
-##### Возможные исключения: в случае, если пользователь не найден, выбрасываем исключение UserNotFoundException.
+##### Возможные исключения:
 
-### version 7.0
-
-Создан следующий эндпойнт:
-
-## UserController
-
-### Get
+В случае, если пользователь не найден, выбрасываем исключение UserNotFoundException.
 
 #### Получение пользователя по id. На входе id пользователя, на выходе UserDto.
 
-#### Запрос:
+##### Запрос:
 
 ```http request
 http://localhost:9087/api/users/4
 ```
 
-#### Ответ:
+##### Ответ:
 
 ```json
 {
@@ -142,150 +169,67 @@ http://localhost:9087/api/users/4
 }
 ```
 
-##### Возможные исключения: в случае, если пользователь не найден, выбрасываем исключение UserNotFoundException.
-
-### version 8.0
-
-Создан следующий эндпойнт:
-
-## UserController
-
-### Delete
-
-#### Удаление пользователя по id, на входе id пользователя, на выходе ничего нет.
-
-#### Запрос:
-
-```http request
-http://localhost:9087/api/users/6
-```
-
-#### Ответ:
-
-204 No Content
-
-##### Исключений в данном эндпоинте не предусмотрено
-
-### version 9.0
-
-Создан следующий эндпойнт:
-
-## UserController
-
-### POST
-
-#### Привязка адреса к пользователю. На входе AddressCreateDto, на выходе AddressDto.
-
-#### Запрос:
-
-```http request
-http://localhost:9087/api/users/address
-```
-
-#### Тело запроса
-
-```json
-{
-  "userId": 4,
-  "apartment": 45,
-  "housing": "",
-  "house": 89,
-  "street": "street_three",
-  "city": "city_two",
-  "postalCode": "kki980",
-  "country": "country_two"
-}
-```
-
-#### Ответ:
-
-```json
-{
-"id": 7,
-"userId": 4,
-"apartment": 45,
-"housing": "",
-"house": 89,
-"street": "street_three",
-"city": "city_two",
-"postalCode": "kki980",
-"country": "country_two"
-}
-```
 ##### Возможные исключения:
-В приходящем dto по userId мы проверяем, существует ли пользователь с таким id, если он
-не найден то выбрасываем исключение UserNotFoundException.
 
-### version 10.0
+В случае, если пользователь не найден, выбрасываем исключение UserNotFoundException.
 
-Создан следующий эндпойнт:
+#### Разработан API по получению всех адресов, привязанных к пользователю по его id. На входе id пользователя, на выходе List<AddressDto>
 
-## UserController
-
-### GET
-
-#### Разработан API по получению всех адресов,
-
-#### привязанных к пользователю по его id. На входе id пользователя, на выходе List<AddressDto>
-
-#### Запрос:
+##### Запрос:
 
 ```http request
 http://localhost:9087/api/users/address/2
 ```
 
-#### Тело запроса
+##### Ответ:
 
-отсутствует
-
-
-#### Ответ:
-``` json
- {
-        "id": 1,
-        "userId": 2,
-        "apartment": 0,
-        "housing": "",
-        "house": 5,
-        "street": "osipova",
-        "city": "grodno",
-        "postalCode": "246758",
-        "country": "Беларусь"
-    },
-    {
-        "id": 2,
-        "userId": 2,
-        "apartment": 0,
-        "housing": "",
-        "house": 5,
-        "street": "osipova",
-        "city": "grodno",
-        "postalCode": "246758",
-        "country": "Беларусь"
-    },
-    {
-        "id": 3,
-        "userId": 2,
-        "apartment": 0,
-        "housing": "",
-        "house": 5,
-        "street": "osipova",
-        "city": "grodno",
-        "postalCode": "246758",
-        "country": "Беларусь"
-    },
-    {
-        "id": 4,
-        "userId": 2,
-        "apartment": 0,
-        "housing": "",
-        "house": 5,
-        "street": "osipova",
-        "city": "grodno",
-        "postalCode": "246758",
-        "country": "Беларусь"
-    }
-}
+```json
+[
+  {
+    "id": 1,
+    "userId": 2,
+    "apartment": 0,
+    "housing": "",
+    "house": 5,
+    "street": "osipova",
+    "city": "grodno",
+    "postalCode": "246758",
+    "country": "Беларусь"
+  },
+  {
+    "id": 2,
+    "userId": 2,
+    "apartment": 0,
+    "housing": "",
+    "house": 5,
+    "street": "osipova",
+    "city": "grodno",
+    "postalCode": "246758",
+    "country": "Беларусь"
+  },
+  {
+    "id": 3,
+    "userId": 2,
+    "apartment": 0,
+    "housing": "",
+    "house": 5,
+    "street": "osipova",
+    "city": "grodno",
+    "postalCode": "246758",
+    "country": "Беларусь"
+  },
+  {
+    "id": 4,
+    "userId": 2,
+    "apartment": 0,
+    "housing": "",
+    "house": 5,
+    "street": "osipova",
+    "city": "grodno",
+    "postalCode": "246758",
+    "country": "Беларусь"
+  }
+]
 ```
 
 ##### Возможные исключения:
@@ -293,92 +237,18 @@ http://localhost:9087/api/users/address/2
 В случае, если пользователь не существует, никаких исключений выбрасываться не должно.
 Так же как и если возвращаемый список пустой.
 
-### version 11.0
-
-Создан следующий эндпоинт
-
-## UserController
-
-### Post
-
-#### Создание нового пользователя. На входе UserInfoDto пользователя, на выходе UserDto.
-
-#### Запрос
-
-```http request
-http://localhost:9082/api/users
-```
-
-#### Тело запроса
-
-```json
-{
-  "login": "user_7@gmail.com",
-  "password": "user_7@gmail.com",
-  "role": "USER"
-}
-```
-
-#### Ответ
-
-```json
-{
-  "id": 12,
-  "login": "user_7@gmail.com",
-  "password": "user_7@gmail.com",
-  "role": "USER",
-  "createDate": "2025-01-26T21:43:35.854829",
-  "lastVisitDate": "2025-01-26T21:43:35.854858"
-}
-```
-
-#### Возможные исключения
-
-Никаких исключений выбрасываться не должно
-
-### version 12.0
-
-Создан следующий эндпойнт:
-
-## UserController
-
-### Delete
-
-#### Отвязка адреса от пользователя, на входе AddressCreateDto, на выходе ничего нет.
-
-#### Запрос:
-
-```http request
-DELETE-запрос -
-http: http://localhost:9082/api/users/address/7
-```
-
-#### Тело запроса-отсутствует
-
-##### Ответ - 204 код
-
-##### Исключений в данном эндпоинте не предусмотрено.
-
-### version 13.0
-
-Создан следующий эндпойнт:
-
-## UserController
-
-### GET
-
 #### Получение пользователей с возможностью пагинации и фильтрации по адресным данным.
 
 На входе: pageNumber, pageSize, country, postalCode, city, street, house, housing, apartment  
 На выходе: PageContentDto<UserDto>.
 
-#### Запрос_1:
+##### Запрос_1:
 
 ```http request
 http://localhost:9087/api/users
 ```
 
-#### Ответ:
+##### Ответ:
 
 ```json
 {
@@ -432,11 +302,15 @@ http://localhost:9087/api/users
   ]
 }
 ```
-#### Запрос_2:
+
+##### Запрос_2:
 
 ```http request
 http://localhost:9087/api/users?pageNumber=2
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -448,11 +322,15 @@ http://localhost:9087/api/users?pageNumber=2
   "content": []
 }
 ```
-#### Запрос_3:
+
+##### Запрос_3:
 
 ```http request
 http://localhost:9087/api/users?pageSize=2
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -481,11 +359,15 @@ http://localhost:9087/api/users?pageSize=2
   ]
 }
 ```
-#### Запрос_4:
+
+##### Запрос_4:
 
 ```http request
 http://localhost:9087/api/users?country=usa
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -506,11 +388,15 @@ http://localhost:9087/api/users?country=usa
   ]
 }
 ```
-#### Запрос_5:
+
+##### Запрос_5:
 
 ```http request
 http://localhost:9087/api/users?postalCode=123456
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -531,11 +417,15 @@ http://localhost:9087/api/users?postalCode=123456
   ]
 }
 ```
-#### Запрос_6:
+
+##### Запрос_6:
 
 ```http request
 http://localhost:9087/api/users?city=chelyabinsk
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -556,11 +446,15 @@ http://localhost:9087/api/users?city=chelyabinsk
   ]
 }
 ```
-#### Запрос_7:
+
+##### Запрос_7:
 
 ```http request
 http://localhost:9087/api/users?street=kirkorova
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -589,11 +483,15 @@ http://localhost:9087/api/users?street=kirkorova
   ]
 }
 ```
-#### Запрос_8:
+
+##### Запрос_8:
 
 ```http request
 http://localhost:9087/api/users?house=17
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -614,11 +512,15 @@ http://localhost:9087/api/users?house=17
   ]
 }
 ```
-#### Запрос_9:
+
+##### Запрос_9:
 
 ```http request
 http://localhost:9087/api/users?housing=7
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -639,11 +541,15 @@ http://localhost:9087/api/users?housing=7
   ]
 }
 ```
-#### Запрос_10:
+
+##### Запрос_10:
 
 ```http request
 http://localhost:9087/api/users?apartment=4
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -664,11 +570,15 @@ http://localhost:9087/api/users?apartment=4
   ]
 }
 ```
-#### Запрос_11:
+
+##### Запрос_11:
 
 ```http request
 http://localhost:9087/api/users?street=kirkorova&house=24
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -697,11 +607,15 @@ http://localhost:9087/api/users?street=kirkorova&house=24
   ]
 }
 ```
-#### Запрос_12:
+
+##### Запрос_12:
 
 ```http request
 http://localhost:9087/api/users?city=minsk&country=belarus
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -730,11 +644,15 @@ http://localhost:9087/api/users?city=minsk&country=belarus
   ]
 }
 ```
-#### Запрос_13:
+
+##### Запрос_13:
 
 ```http request
 http://localhost:9087/api/users?pageSize=2&pageNumber=3
 ```
+
+##### Ответ:
+
 ```json
 {
   "page": {
@@ -755,4 +673,116 @@ http://localhost:9087/api/users?pageSize=2&pageNumber=3
   ]
 }
 ```
+
 ##### Исключений в данном эндпоинте не предусмотрено
+
+### POST-запросы
+
+#### Привязка адреса к пользователю. На входе AddressCreateDto, на выходе AddressDto.
+
+##### Запрос:
+
+```http request
+http://localhost:9087/api/users/address
+```
+
+##### Тело запроса
+
+```json
+{
+  "userId": 4,
+  "apartment": 45,
+  "housing": "",
+  "house": 89,
+  "street": "street_three",
+  "city": "city_two",
+  "postalCode": "kki980",
+  "country": "country_two"
+}
+```
+
+##### Ответ:
+
+```json
+{
+  "id": 7,
+  "userId": 4,
+  "apartment": 45,
+  "housing": "",
+  "house": 89,
+  "street": "street_three",
+  "city": "city_two",
+  "postalCode": "kki980",
+  "country": "country_two"
+}
+```
+
+##### Возможные исключения:
+
+В приходящем dto по userId мы проверяем, существует ли пользователь с таким id, если он
+не найден то выбрасываем исключение UserNotFoundException.
+
+#### Создание нового пользователя. На входе UserInfoDto пользователя, на выходе UserDto.
+
+##### Запрос:
+
+```http request
+http://localhost:9087/api/users
+```
+
+##### Тело запроса:
+
+```json
+{
+  "login": "user_7@gmail.com",
+  "password": "user_7@gmail.com",
+  "role": "USER"
+}
+```
+
+##### Ответ:
+
+```json
+{
+  "id": 12,
+  "login": "user_7@gmail.com",
+  "password": "user_7@gmail.com",
+  "role": "USER",
+  "createDate": "2025-01-26T21:43:35.854829",
+  "lastVisitDate": "2025-01-26T21:43:35.854858"
+}
+```
+
+##### Возможные исключения:
+
+Никаких исключений выбрасываться не должно
+
+### DELETE-запросы
+
+#### Удаление пользователя по id, на входе id пользователя, на выходе ничего нет.
+
+##### Запрос:
+
+```http request
+http://localhost:9087/api/users/6
+```
+
+##### Ответ:
+
+204 No Content
+
+##### Исключений в данном эндпоинте не предусмотрено
+
+#### Отвязка адреса от пользователя.
+
+##### Запрос:
+
+```http request
+http://localhost:9087/api/users/address/7
+```
+
+##### Ответ:
+
+204 No Content
+
+##### Исключений в данном эндпоинте не предусмотрено.

@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserDtoByLogin(String login) {
+    public UserDto getUserByLogin(String login) {
         return userMapper.toDto(userRepository.findByLogin(login)
                 .orElseThrow(() -> new UserNotFoundException(login)));
     }
@@ -62,21 +62,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
+    public List<AddressDto> getAddressListByUserId(Long userId) {
+        List<Address> addresses = addressRepository.findByUserId(userId);
+        return addresses.stream()
+                .map(addressMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public PageContentDto<UserDto> findAll(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
+        Pageable pageable = PageRequest.of(pageParamDto.pageNumber() - 1, pageParamDto.pageSize());
+        Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
+        Page<Address> addresses = addressRepository.findAll(spec, pageable);
+        return convertToPageContentDto(addresses);
     }
 
     @Override
     @Transactional
-    public UserDto saveUser(UserInfoDto userInfoDto) {
+    public UserDto save(UserInfoDto userInfoDto) {
         User createdUser = userRepository.save(userMapper.toUser(userInfoDto));
         return userMapper.toDto(createdUser);
     }
 
     @Override
     @Transactional
-    public AddressDto addAddressToUser(AddressCreateDto addressCreateDto) {
+    public AddressDto addAddressByUserId(AddressCreateDto addressCreateDto) {
         Long userId = addressCreateDto.getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
@@ -87,25 +97,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<AddressDto> getAddressesByUserId(Long userId) {
-        List<Address> addresses = addressRepository.findByUserId(userId);
-        return addresses.stream()
-                .map(addressMapper::toDto)
-                .toList();
-    }
-
-    @Override
     @Transactional
     public void deleteAddressById(Long id) {
         addressRepository.findById(id).ifPresent(addressRepository::delete);
     }
 
     @Override
-    public PageContentDto<UserDto> findAll(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
-        Pageable pageable = PageRequest.of(pageParamDto.pageNumber() - 1, pageParamDto.pageSize());
-        Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
-        Page<Address> addresses = addressRepository.findAll(spec, pageable);
-        return convertToPageContentDto(addresses);
+    @Transactional
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
     }
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {

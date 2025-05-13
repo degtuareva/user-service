@@ -11,7 +11,6 @@ import edu.online.messenger.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,7 +45,7 @@ public class UserController {
     @GetMapping("/login/{login}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUserByLogin(@PathVariable String login) {
-        return userService.getUserDtoByLogin(login);
+        return userService.getUserByLogin(login);
     }
 
     @GetMapping("/{id}")
@@ -55,33 +54,10 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
-        userService.deleteUserById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDto saveUser(@Valid @RequestBody UserInfoDto userInfoDto) {
-        return userService.saveUser(userInfoDto);
-    }
-
-    @PostMapping("/address")
-    @ResponseStatus(HttpStatus.CREATED)
-    public AddressDto addUserAddress(@Valid @RequestBody AddressCreateDto addressCreateDto) {
-        return userService.addAddressToUser(addressCreateDto);
-    }
-
     @GetMapping("/address/{userId}")
-    public List<AddressDto> getUserAddresses(@PathVariable Long userId) {
-        return userService.getAddressesByUserId(userId);
-    }
-
-    @DeleteMapping("/address/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAddressFromUser(@PathVariable Long id) {
-        userService.deleteAddressById(id);
+    @ResponseStatus(HttpStatus.OK)
+    public List<AddressDto> getAddressListByUserId(@PathVariable Long userId) {
+        return userService.getAddressListByUserId(userId);
     }
 
     @GetMapping
@@ -100,5 +76,29 @@ public class UserController {
         return userService.findAll(
                 new PageParamDto(pageNumber, pageSize),
                 new AddressFilterDto(country, postalCode, city, street, house, housing, apartment));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto save(@Valid @RequestBody UserInfoDto userInfoDto) {
+        return userService.save(userInfoDto);
+    }
+
+    @PostMapping("/address")
+    @ResponseStatus(HttpStatus.CREATED)
+    public AddressDto addAddressByUserId(@Valid @RequestBody AddressCreateDto addressCreateDto) {
+        return userService.addAddressByUserId(addressCreateDto);
+    }
+
+    @DeleteMapping("/address/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAddressById(@PathVariable Long id) {
+        userService.deleteAddressById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUserById(@PathVariable Long id) {
+        userService.deleteUserById(id);
     }
 }

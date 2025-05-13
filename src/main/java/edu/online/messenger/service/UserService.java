@@ -5,8 +5,8 @@ import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.PageContentDto;
 import edu.online.messenger.model.dto.PageParamDto;
 import edu.online.messenger.model.dto.UserDto;
-import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import edu.online.messenger.model.dto.UserInfoDto;
+import edu.online.messenger.model.entity.dto.AddressFilterDto;
 
 import java.util.List;
 
@@ -16,19 +16,19 @@ public interface UserService {
 
     boolean existsByLogin(String login);
 
-    UserDto getUserDtoByLogin(String login);
+    UserDto getUserByLogin(String login);
 
     UserDto getUserById(Long id);
 
-    void deleteUserById(Long id);
+    List<AddressDto> getAddressListByUserId(Long userId);
 
-    UserDto saveUser(UserInfoDto userInfoDto);
+    PageContentDto<UserDto> findAll(PageParamDto pageParamDto, AddressFilterDto addressFilterDto);
 
-    AddressDto addAddressToUser(AddressCreateDto addressCreateDto);
+    UserDto save(UserInfoDto userInfoDto);
 
-    List<AddressDto> getAddressesByUserId(Long userId);
+    AddressDto addAddressByUserId(AddressCreateDto addressCreateDto);
 
     void deleteAddressById(Long id);
 
-    PageContentDto<UserDto> findAll(PageParamDto pageParamDto, AddressFilterDto addressFilterDto);
+    void deleteUserById(Long id);
 }

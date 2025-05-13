@@ -20,7 +20,6 @@ public class Address extends BaseEntity {
     private User user;
 
     private Integer apartment;
-
     private String housing;
 
     @Column(nullable = false)
