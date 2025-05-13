@@ -161,6 +161,7 @@ http://localhost:9087/api/users/6
 ```
 
 #### Ответ:
+
 204 No Content
 
 ##### Исключений в данном эндпоинте не предусмотрено
@@ -182,6 +183,7 @@ http://localhost:9087/api/users/address
 ```
 
 #### Тело запроса
+
 ```json
 {
   "userId": 4,
@@ -194,7 +196,9 @@ http://localhost:9087/api/users/address
   "country": "country_two"
 }
 ```
+
 #### Ответ:
+
 ```json
 {
 "id": 7,
@@ -354,3 +358,401 @@ http: http://localhost:9082/api/users/address/7
 ##### Ответ - 204 код
 
 ##### Исключений в данном эндпоинте не предусмотрено.
+
+### version 13.0
+
+Создан следующий эндпойнт:
+
+## UserController
+
+### GET
+
+#### Получение пользователей с возможностью пагинации и фильтрации по адресным данным.
+
+На входе: pageNumber, pageSize, country, postalCode, city, street, house, housing, apartment  
+На выходе: PageContentDto<UserDto>.
+
+#### Запрос_1:
+
+```http request
+http://localhost:9087/api/users
+```
+
+#### Ответ:
+
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 5
+  },
+  "content": [
+    {
+      "id": 1,
+      "login": "Alex",
+      "password": "1111",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:08.533881",
+      "lastVisitDate": "2025-05-05T18:00:08.533881"
+    },
+    {
+      "id": 2,
+      "login": "Maria",
+      "password": "2222",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:48.031381",
+      "lastVisitDate": "2025-05-05T18:00:48.031381"
+    },
+    {
+      "id": 3,
+      "login": "Olya",
+      "password": "3333",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:34.757179",
+      "lastVisitDate": "2025-05-05T18:01:34.757179"
+    },
+    {
+      "id": 4,
+      "login": "Leonid",
+      "password": "4444",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:54.52683",
+      "lastVisitDate": "2025-05-05T18:01:54.52683"
+    },
+    {
+      "id": 5,
+      "login": "Tolya",
+      "password": "5555",
+      "role": "USER",
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
+    }
+  ]
+}
+```
+#### Запрос_2:
+
+```http request
+http://localhost:9087/api/users?pageNumber=2
+```
+```json
+{
+  "page": {
+    "pageNumber": 2,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 5
+  },
+  "content": []
+}
+```
+#### Запрос_3:
+
+```http request
+http://localhost:9087/api/users?pageSize=2
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 2,
+    "totalPages": 3,
+    "totalElements": 5
+  },
+  "content": [
+    {
+      "id": 1,
+      "login": "Alex",
+      "password": "1111",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:08.533881",
+      "lastVisitDate": "2025-05-05T18:00:08.533881"
+    },
+    {
+      "id": 2,
+      "login": "Maria",
+      "password": "2222",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:48.031381",
+      "lastVisitDate": "2025-05-05T18:00:48.031381"
+    }
+  ]
+}
+```
+#### Запрос_4:
+
+```http request
+http://localhost:9087/api/users?country=usa
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 4,
+      "login": "Leonid",
+      "password": "4444",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:54.52683",
+      "lastVisitDate": "2025-05-05T18:01:54.52683"
+    }
+  ]
+}
+```
+#### Запрос_5:
+
+```http request
+http://localhost:9087/api/users?postalCode=123456
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 2,
+      "login": "Maria",
+      "password": "2222",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:48.031381",
+      "lastVisitDate": "2025-05-05T18:00:48.031381"
+    }
+  ]
+}
+```
+#### Запрос_6:
+
+```http request
+http://localhost:9087/api/users?city=chelyabinsk
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 5,
+      "login": "Tolya",
+      "password": "5555",
+      "role": "USER",
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
+    }
+  ]
+}
+```
+#### Запрос_7:
+
+```http request
+http://localhost:9087/api/users?street=kirkorova
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 2
+  },
+  "content": [
+    {
+      "id": 3,
+      "login": "Olya",
+      "password": "3333",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:34.757179",
+      "lastVisitDate": "2025-05-05T18:01:34.757179"
+    },
+    {
+      "id": 5,
+      "login": "Tolya",
+      "password": "5555",
+      "role": "USER",
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
+    }
+  ]
+}
+```
+#### Запрос_8:
+
+```http request
+http://localhost:9087/api/users?house=17
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 4,
+      "login": "Leonid",
+      "password": "4444",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:54.52683",
+      "lastVisitDate": "2025-05-05T18:01:54.52683"
+    }
+  ]
+}
+```
+#### Запрос_9:
+
+```http request
+http://localhost:9087/api/users?housing=7
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 3,
+      "login": "Olya",
+      "password": "3333",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:34.757179",
+      "lastVisitDate": "2025-05-05T18:01:34.757179"
+    }
+  ]
+}
+```
+#### Запрос_10:
+
+```http request
+http://localhost:9087/api/users?apartment=4
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 1
+  },
+  "content": [
+    {
+      "id": 1,
+      "login": "Alex",
+      "password": "1111",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:08.533881",
+      "lastVisitDate": "2025-05-05T18:00:08.533881"
+    }
+  ]
+}
+```
+#### Запрос_11:
+
+```http request
+http://localhost:9087/api/users?street=kirkorova&house=24
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 2
+  },
+  "content": [
+    {
+      "id": 3,
+      "login": "Olya",
+      "password": "3333",
+      "role": "USER",
+      "createDate": "2025-05-05T18:01:34.757179",
+      "lastVisitDate": "2025-05-05T18:01:34.757179"
+    },
+    {
+      "id": 5,
+      "login": "Tolya",
+      "password": "5555",
+      "role": "USER",
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
+    }
+  ]
+}
+```
+#### Запрос_12:
+
+```http request
+http://localhost:9087/api/users?city=minsk&country=belarus
+```
+```json
+{
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 15,
+    "totalPages": 1,
+    "totalElements": 2
+  },
+  "content": [
+    {
+      "id": 1,
+      "login": "Alex",
+      "password": "1111",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:08.533881",
+      "lastVisitDate": "2025-05-05T18:00:08.533881"
+    },
+    {
+      "id": 2,
+      "login": "Maria",
+      "password": "2222",
+      "role": "ADMIN",
+      "createDate": "2025-05-05T18:00:48.031381",
+      "lastVisitDate": "2025-05-05T18:00:48.031381"
+    }
+  ]
+}
+```
+#### Запрос_13:
+
+```http request
+http://localhost:9087/api/users?pageSize=2&pageNumber=3
+```
+```json
+{
+  "page": {
+    "pageNumber": 3,
+    "pageSize": 2,
+    "totalPages": 3,
+    "totalElements": 5
+  },
+  "content": [
+    {
+      "id": 5,
+      "login": "Tolya",
+      "password": "5555",
+      "role": "USER",
+      "createDate": "2025-05-05T18:02:14.271097",
+      "lastVisitDate": "2025-05-05T18:02:14.271097"
+    }
+  ]
+}
+```
+##### Исключений в данном эндпоинте не предусмотрено

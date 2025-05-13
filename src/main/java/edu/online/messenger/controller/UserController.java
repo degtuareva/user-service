@@ -2,8 +2,11 @@ package edu.online.messenger.controller;
 
 import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;
+import edu.online.messenger.model.dto.PageContentDto;
+import edu.online.messenger.model.dto.PageParamDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.dto.UserInfoDto;
+import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import edu.online.messenger.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -78,5 +82,23 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAddressFromUser(@PathVariable Long id) {
         userService.deleteAddressById(id);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public PageContentDto<UserDto> findAll(
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize,
+            @RequestParam(value = "country", required = false) String country,
+            @RequestParam(value = "postalCode", required = false) String postalCode,
+            @RequestParam(value = "city", required = false) String city,
+            @RequestParam(value = "street", required = false) String street,
+            @RequestParam(value = "house", required = false) String house,
+            @RequestParam(value = "housing", required = false) String housing,
+            @RequestParam(value = "apartment", required = false) String apartment
+    ) {
+        return userService.findAll(
+                new PageParamDto(pageNumber, pageSize),
+                new AddressFilterDto(country, postalCode, city, street, house, housing, apartment));
     }
 }
