@@ -2,10 +2,10 @@ package edu.online.messenger.controller;
 
 import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;
-import edu.online.messenger.model.dto.PageContentDto;
-import edu.online.messenger.model.dto.PageParamDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.dto.UserInfoDto;
+import edu.online.messenger.model.dto.page.PageContentDto;
+import edu.online.messenger.model.dto.page.PageParamDto;
 import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import edu.online.messenger.service.UserService;
 import jakarta.validation.Valid;
