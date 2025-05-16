@@ -35,11 +35,12 @@ public class UserController {
     @GetMapping("existence/id/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public boolean existsById(@PathVariable Long userId) {
-            log.info("Received request to check existence of user by id: {}", userId);
-    boolean exists = userService.existsById(userId);
+        log.info("Received request to check existence of user by id: {}", userId);
+        boolean exists = userService.existsById(userId);
         log.info("Existence check result for user id {}: {}", userId, exists);
         return exists;
     }
+
     @GetMapping("/existence/login/{login}")
     @ResponseStatus(HttpStatus.OK)
     public boolean existsByLogin(@PathVariable String login) {
@@ -48,6 +49,7 @@ public class UserController {
         log.info("Existence check result for user login '{}': {}", login, exists);
         return exists;
     }
+
     @GetMapping("/login/{login}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUserByLogin(@PathVariable String login) {
@@ -98,6 +100,7 @@ public class UserController {
         log.info("Returning page content with {} users", result.content().size());
         return result;
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto save(@Valid @RequestBody UserInfoDto userInfoDto) {

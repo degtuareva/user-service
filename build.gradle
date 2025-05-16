@@ -22,8 +22,6 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.apache.commons:commons-lang3:3.17.0'
-    //implementation 'org.slf4j:slf4j-api:2.0.7'
-    //implementation 'org.slf4j:slf4j-api:2.1.0-alpha1'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
