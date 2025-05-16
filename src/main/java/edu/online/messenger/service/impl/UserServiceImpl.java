@@ -86,11 +86,11 @@ public class UserServiceImpl implements UserService {
     public List<AddressDto> getAddressListByUserId(Long userId) {
         log.info("Fetching addresses for user id: {}", userId);
         List<Address> addresses = addressRepository.findByUserId(userId);
-        List<AddressDto> addressDtos = addresses.stream()
+        List<AddressDto> addressDto = addresses.stream()
                 .map(addressMapper::toDto)
                 .toList();
-        log.info("Found {} addresses for user id {}", addressDtos.size(), userId);
-        return addressDtos;
+        log.info("Found {} addresses for user id {}", addressDto.size(), userId);
+        return addressDto;
     }
 
     @Override
