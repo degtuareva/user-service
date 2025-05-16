@@ -42,65 +42,56 @@ public class UserServiceImpl implements UserService {
     private final AddressMapper addressMapper;
 
     @Override
-    @Transactional
     public boolean existsById(Long id) {
         log.debug("Checking existence of user by id: {}", id);
         boolean exists = userRepository.existsById(id);
-        log.debug("User with id {} exists: {}", id, exists);
+        log.debug("Existence result for user id {}: {}", id, exists);
         return exists;
     }
 
     @Override
-    @Transactional
     public boolean existsByLogin(String login) {
         log.debug("Checking existence of user by login: {}", login);
         boolean exists = userRepository.existsByLogin(login);
-        log.debug("User with login '{}' exists: {}", login, exists);
+        log.debug("Existence result for user login '{}': {}", login, exists);
         return exists;
     }
 
     @Override
-    @Transactional
     public UserDto getUserByLogin(String login) {
         log.info("Fetching user by login: {}", login);
-        try {
-            User user = userRepository.findByLogin(login)
-                    .orElseThrow(() -> new UserNotFoundException(login));
-            UserDto userDto = userMapper.toDto(user);
-            log.info("User found: {}", userDto);
-            return userDto;
-        } catch (UserNotFoundException e) {
-            log.error("User not found with login: {}", login, e);
-            throw e;
-        }
+        UserDto userDto = userRepository.findByLogin(login)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> {
+                    log.error("User not found with login: {}", login);
+                    return new UserNotFoundException(login);
+                });
+        log.info("User found: {}", userDto);
+        return userDto;
     }
 
     @Override
-    @Transactional
     public UserDto getUserById(Long id) {
         log.info("Fetching user by id: {}", id);
-        try {
-            User user = userRepository.findById(id)
-                    .orElseThrow(() -> new UserNotFoundException(id));
-            UserDto userDto = userMapper.toDto(user);
-            log.info("User found: {}", userDto);
-            return userDto;
-        } catch (UserNotFoundException e) {
-            log.error("User not found with id: {}", id, e);
-            throw e;
-        }
+        UserDto userDto = userRepository.findById(id)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> {
+                    log.error("User not found with id: {}", id);
+                    return new UserNotFoundException(id);
+                });
+        log.info("User found: {}", userDto);
+        return userDto;
     }
 
     @Override
-    @Transactional
     public List<AddressDto> getAddressListByUserId(Long userId) {
         log.info("Fetching addresses for user id: {}", userId);
         List<Address> addresses = addressRepository.findByUserId(userId);
-        List<AddressDto> addressDto = addresses.stream()
+        List<AddressDto> addressDtos = addresses.stream()
                 .map(addressMapper::toDto)
                 .toList();
-        log.info("Found {} addresses for user id {}", addressDto.size(), userId);
-        return addressDto;
+        log.info("Found {} addresses for user id {}", addressDtos.size(), userId);
+        return addressDtos;
     }
 
     @Override
@@ -115,105 +106,76 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto save(UserInfoDto userInfoDto) {
         log.info("Attempting to save new user: {}", userInfoDto);
-        try {
-            User user = userMapper.toUser(userInfoDto);
-            User savedUser = userRepository.save(user);
-            UserDto userDto = userMapper.toDto(savedUser);
-            log.info("User successfully saved: {}", userDto);
-            return userDto;
-        } catch (Exception e) {
-            log.error("Error occurred while saving user: {}", userInfoDto, e);
-            throw e;
-        }
+        User createdUser = userRepository.save(userMapper.toUser(userInfoDto));
+        UserDto userDto = userMapper.toDto(createdUser);
+        log.info("User successfully saved: {}", userDto);
+        return userDto;
     }
 
-    //    @Override
-//    @Transactional
-//    public UserDto save(UserInfoDto userInfoDto) {
-//        User createdUser = userRepository.save(userMapper.toUser(userInfoDto));
-//        return userMapper.toDto(createdUser);
-//    }
     @Override
     @Transactional
     public AddressDto addAddressByUserId(AddressCreateDto addressCreateDto) {
-        log.info("Adding address for userId {}: {}", addressCreateDto.getUserId(), addressCreateDto);
-        try {
-            Address address = addressMapper.toEntity(addressCreateDto);
-            Address savedAddress = addressRepository.save(address);
-            AddressDto addressDto = addressMapper.toDto(savedAddress);
-            log.info("Address successfully added: {}", addressDto);
-            return addressDto;
-        } catch (Exception e) {
-            log.error("Error occurred while adding address: {}", addressCreateDto, e);
-            throw e;
-        }
+        Long userId = addressCreateDto.getUserId();
+        log.info("Adding address for userId {}: {}", userId, addressCreateDto);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.error("User not found with id: {}", userId);
+                    return new UserNotFoundException(userId);
+                });
+        Address address = addressMapper.toEntity(addressCreateDto);
+        address.setUser(user);
+        Address savedAddress = addressRepository.save(address);
+        AddressDto addressDto = addressMapper.toDto(savedAddress);
+        log.info("Address successfully added: {}", addressDto);
+        return addressDto;
     }
-//    @Override
-//    @Transactional
-//    public AddressDto addAddressByUserId(AddressCreateDto addressCreateDto) {
-//        Long userId = addressCreateDto.getUserId();
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new UserNotFoundException(userId));
-//        Address address = addressMapper.toEntity(addressCreateDto);
-//        address.setUser(user);
-//        Address savedAddress = addressRepository.save(address);
-//        return addressMapper.toDto(savedAddress);
-//    }
 
-    //    @Override
-//    @Transactional
-//    public void deleteAddressById(Long id) {
-//        addressRepository.findById(id).ifPresent(addressRepository::delete);
-//    }
     @Override
     @Transactional
     public void deleteAddressById(Long id) {
         log.info("Attempting to delete address with id: {}", id);
-        try {
-            addressRepository.deleteById(id);
-            log.info("Address with id {} successfully deleted", id);
-        } catch (Exception e) {
-            log.error("Error occurred while deleting address with id: {}", id, e);
-            throw e;
-        }
+        addressRepository.findById(id).ifPresentOrElse(
+                address -> {
+                    addressRepository.delete(address);
+                    log.info("Address with id {} successfully deleted", id);
+                },
+                () -> log.warn("Address with id {} not found for deletion", id)
+        );
     }
 
     @Override
     @Transactional
     public void deleteUserById(Long id) {
         log.info("Attempting to delete user with id: {}", id);
-        try {
+        if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             log.info("User with id {} successfully deleted", id);
-        } catch (Exception e) {
-            log.error("Error occurred while deleting user with id: {}", id, e);
-            throw e;
+        } else {
+            log.warn("User with id {} not found for deletion", id);
         }
     }
 
-    //    @Override
-//    @Transactional
-//    public void deleteUserById(Long id) {
-//        userRepository.deleteById(id);
-//    }
-
-//    private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
-//        Set<Long> userIds = page.getContent()
-//                .stream()
-//                .map(Address::getUser)
-//                .map(BaseEntity::getId)
-//                .collect(Collectors.toSet());
-//        List<UserDto> userDtoList = userRepository.findAllById(userIds)
-//                .stream()
-//                .map(userMapper::toDto)
-//                .toList();
-//        PageDto pageDto = new PageDto(
-//                page.getNumber() + 1,
-//                page.getSize(),
-//                page.getTotalPages(),
-//                page.getTotalElements());
-//        return new PageContentDto<>(pageDto, userDtoList);
-//    }
+    private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
+        log.debug("Converting Page<Address> to PageContentDto<UserDto>");
+        Set<Long> userIds = page.getContent()
+                .stream()
+                .map(Address::getUser)
+                .map(BaseEntity::getId)
+                .collect(Collectors.toSet());
+        log.debug("Extracted user IDs from addresses: {}", userIds);
+        List<UserDto> userDtoList = userRepository.findAllById(userIds)
+                .stream()
+                .map(userMapper::toDto)
+                .toList();
+        PageDto pageDto = new PageDto(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements());
+        log.debug("PageDto created: {}", pageDto);
+        return new PageContentDto<>(pageDto, userDtoList);
+    }
 }
