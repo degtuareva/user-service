@@ -110,7 +110,6 @@ public class UserController {
         return savedUser;
     }
 
-
     @PostMapping("/address")
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDto addAddressByUserId(@Valid @RequestBody AddressCreateDto addressCreateDto) {

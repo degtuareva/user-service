@@ -84,7 +84,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-
     public List<AddressDto> getAddressListByUserId(Long userId) {
         log.info("Fetching addresses for user id: {}", userId);
         List<Address> addresses = addressRepository.findByUserId(userId);
