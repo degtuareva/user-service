@@ -74,6 +74,17 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(pageParamDto.pageNumber() - 1, pageParamDto.pageSize());
         Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
         Page<Address> addresses = addressRepository.findAll(spec, pageable);
+        boolean isFilterEmpty = addressFilterDto.country() == null
+                && addressFilterDto.postalCode() == null
+                && addressFilterDto.city() == null
+                && addressFilterDto.street() == null
+                && addressFilterDto.house() == null
+                && addressFilterDto.housing() == null
+                && addressFilterDto.apartment() == null;
+        if (isFilterEmpty) {
+            Page<User> users = userRepository.findAll(pageable);
+            return convertUserPageToDto(users);
+        }
         return convertToPageContentDto(addresses);
     }
 
@@ -115,6 +126,19 @@ public class UserServiceImpl implements UserService {
                 .map(BaseEntity::getId)
                 .collect(Collectors.toSet());
         List<UserDto> userDtoList = userRepository.findAllById(userIds)
+                .stream()
+                .map(userMapper::toDto)
+                .toList();
+        PageDto pageDto = new PageDto(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements());
+        return new PageContentDto<>(pageDto, userDtoList);
+    }
+
+    private PageContentDto<UserDto> convertUserPageToDto(Page<User> page) {
+        List<UserDto> userDtoList = page.getContent()
                 .stream()
                 .map(userMapper::toDto)
                 .toList();
