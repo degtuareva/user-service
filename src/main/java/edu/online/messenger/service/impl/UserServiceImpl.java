@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto save(UserInfoDto userInfoDto) {
-        log.info("Попытка сохранить нового пользователя: {}", userInfoDto);
+        log.info("Выполняется сохранение нового пользователя: {}", userInfoDto);
         User createdUser = userRepository.save(userMapper.toUser(userInfoDto));
         UserDto userDto = userMapper.toDto(createdUser);
         log.info("Пользователь успешно сохранён: {}", userDto);
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteAddressById(Long id) {
-        log.info("Попытка удалить адрес с id: {}", id);
+        log.info("Выполняется удаление адреса с id: {}", id);
         addressRepository.findById(id).ifPresentOrElse(
                 address -> {
                     addressRepository.delete(address);
@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUserById(Long id) {
-        log.info("Попытка удалить пользователя с id: {}", id);
+        log.info("Выполняется удаление пользователя с id: {}", id);
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             log.info("Пользователь с id {} успешно удалён", id);
@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
-        log.debug("Преобразование Page<Address> в PageContentDto<UserDto>");
+        log.debug("Выполняется преобразование Page<Address> в PageContentDto<UserDto>");
         Set<Long> userIds = page.getContent()
                 .stream()
                 .map(Address::getUser)
