@@ -35,45 +35,45 @@ public class UserController {
     @GetMapping("existence/id/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public boolean existsById(@PathVariable Long userId) {
-        log.info("Received request to check existence of user by id: {}", userId);
+        log.info("Получен запрос на проверку существования пользователя по id: {}", userId);
         boolean exists = userService.existsById(userId);
-        log.info("Existence check result for user id {}: {}", userId, exists);
+        log.info("Результат проверки существования пользователя с id {}: {}", userId, exists);
         return exists;
     }
 
     @GetMapping("/existence/login/{login}")
     @ResponseStatus(HttpStatus.OK)
     public boolean existsByLogin(@PathVariable String login) {
-        log.info("Received request to check existence of user by login: {}", login);
+        log.info("Получен запрос на проверку существования пользователя по логину: {}", login);
         boolean exists = userService.existsByLogin(login);
-        log.info("Existence check result for user login '{}': {}", login, exists);
+        log.info("Результат проверки существования пользователя с логином'{}': {}", login, exists);
         return exists;
     }
 
     @GetMapping("/login/{login}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUserByLogin(@PathVariable String login) {
-        log.info("Received request to get user by login: {}", login);
+        log.info("Получен запрос на получение пользователя по логину: {}", login);
         UserDto userDto = userService.getUserByLogin(login);
-        log.info("Returning user data for login '{}': {}", login, userDto);
+        log.info("Возвращены данные пользователя по логину  '{}': {}", login, userDto);
         return userDto;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUserById(@PathVariable Long id) {
-        log.info("Received request to get user by id: {}", id);
+        log.info("Получен запрос на получение пользователя по id: {}", id);
         UserDto userDto = userService.getUserById(id);
-        log.info("Returning user data for id {}: {}", id, userDto);
+        log.info("Возвращены данные пользователя по id {}: {}", id, userDto);
         return userDto;
     }
 
     @GetMapping("/address/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public List<AddressDto> getAddressListByUserId(@PathVariable Long userId) {
-        log.info("Received request to get address list for user id: {}", userId);
+        log.info("Получен запрос на получение списка адресов пользователя с id: {}", userId);
         List<AddressDto> addresses = userService.getAddressListByUserId(userId);
-        log.info("Returning {} addresses for user id {}", addresses.size(), userId);
+        log.info("Возвращено {} адресов для пользователя с id {}", addresses.size(), userId);
         return addresses;
     }
 
@@ -90,48 +90,48 @@ public class UserController {
             @RequestParam(value = "housing", required = false) String housing,
             @RequestParam(value = "apartment", required = false) String apartment
     ) {
-        log.info("Received request to find all users with filters: country={}, postalCode={}, city={}, street={}, house={}, housing={}, apartment={}, pageNumber={}, pageSize={}",
+        log.info("Получен запрос на поиск всех пользователей с фильтрами: country={}, postalCode={}, city={}, street={}, house={}, housing={}, apartment={}, pageNumber={}, pageSize={}",
                 country, postalCode, city, street, house, housing, apartment, pageNumber, pageSize);
 
         PageContentDto<UserDto> result = userService.findAll(
                 new PageParamDto(pageNumber, pageSize),
                 new AddressFilterDto(country, postalCode, city, street, house, housing, apartment));
 
-        log.info("Returning page content with {} users", result.content().size());
+        log.info("Возвращено содержимое страницы с {} пользователями", result.content().size());
         return result;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto save(@Valid @RequestBody UserInfoDto userInfoDto) {
-        log.info("Received request to save user: {}", userInfoDto);
+        log.info("Получен запрос на сохранение пользователя: {}", userInfoDto);
         UserDto savedUser = userService.save(userInfoDto);
-        log.info("User saved successfully: {}", savedUser);
+        log.info("Пользователь успешно сохранён: {}", savedUser);
         return savedUser;
     }
 
     @PostMapping("/address")
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDto addAddressByUserId(@Valid @RequestBody AddressCreateDto addressCreateDto) {
-        log.info("Received request to add address: {}", addressCreateDto);
+        log.info("Получен запрос на добавление адреса: {}", addressCreateDto);
         AddressDto savedAddress = userService.addAddressByUserId(addressCreateDto);
-        log.info("Address added successfully: {}", savedAddress);
+        log.info("Адрес успешно добавлен: {}", savedAddress);
         return savedAddress;
     }
 
     @DeleteMapping("/address/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAddressById(@PathVariable Long id) {
-        log.info("Received request to delete address with id: {}", id);
+        log.info("Получен запрос на удаление адреса с id: {}", id);
         userService.deleteAddressById(id);
-        log.info("Address with id {} deleted successfully", id);
+        log.info("Адрес с id {} успешно удалён", id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable Long id) {
-        log.info("Received request to delete user with id: {}", id);
+        log.info("Получен запрос на удаление пользователя с id: {}", id);
         userService.deleteUserById(id);
-        log.info("User with id {} deleted successfully", id);
+        log.info("Пользователь с id {} успешно удалён", id);
     }
 }
