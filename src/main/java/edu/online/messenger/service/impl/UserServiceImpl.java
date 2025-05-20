@@ -27,8 +27,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.RecordComponent;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -115,22 +116,15 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isFilterEmpty(AddressFilterDto addressFilterDto) {
-        if (addressFilterDto == null) {
-            return true;
-        }
-        RecordComponent[] recordComponents = addressFilterDto.getClass().getRecordComponents();
-        for (RecordComponent recordComponent : recordComponents) {
-            Object value;
-            try {
-                value = recordComponent.getAccessor().invoke(addressFilterDto);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException("Ошибка доступа к полю " + recordComponent.getName(), e);
-            }
-            if (value != null) {
-                return false;
-            }
-        }
-        return true;
+        return Arrays.stream(addressFilterDto.getClass().getRecordComponents())
+                .map(recordComponent -> {
+                    try {
+                        return recordComponent.getAccessor().invoke(addressFilterDto);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException("Ошибка доступа к полю " + recordComponent.getName(), e);
+                    }
+                })
+                .allMatch(Objects::isNull);
     }
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
