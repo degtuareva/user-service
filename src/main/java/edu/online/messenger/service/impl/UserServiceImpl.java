@@ -26,6 +26,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.RecordComponent;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -74,14 +76,7 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(pageParamDto.pageNumber() - 1, pageParamDto.pageSize());
         Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
         Page<Address> addresses = addressRepository.findAll(spec, pageable);
-        boolean isFilterEmpty = addressFilterDto.country() == null
-                && addressFilterDto.postalCode() == null
-                && addressFilterDto.city() == null
-                && addressFilterDto.street() == null
-                && addressFilterDto.house() == null
-                && addressFilterDto.housing() == null
-                && addressFilterDto.apartment() == null;
-        if (isFilterEmpty) {
+        if (isFilterEmpty(addressFilterDto)) {
             Page<User> users = userRepository.findAll(pageable);
             return convertUserPageToDto(users);
         }
@@ -117,6 +112,25 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    private boolean isFilterEmpty(AddressFilterDto addressFilterDto) {
+        if (addressFilterDto == null) {
+            return true;
+        }
+        RecordComponent[] recordComponents = addressFilterDto.getClass().getRecordComponents();
+        for (RecordComponent recordComponent : recordComponents) {
+            Object value;
+            try {
+                value = recordComponent.getAccessor().invoke(addressFilterDto);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException("Ошибка доступа к полю " + recordComponent.getName(), e);
+            }
+            if (value != null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
