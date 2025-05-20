@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -42,129 +43,127 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean existsById(Long id) {
-        log.debug("Проверка существования пользователя по id: {}", id);
-        boolean exists = userRepository.existsById(id);
-        log.debug("Результат проверки существования пользователя с id {}: {}", id, exists);
-        return exists;
+        log.info("Проверка существования пользователя по id: {}", id);
+        log.debug("existsById - входящий параметр id: {}", id);
+        boolean result = userRepository.existsById(id);
+        log.debug("existsById - результат: {}", result);
+        log.info("Результат existsById для id {}: {}", id, result);
+        return result;
     }
 
     @Override
     public boolean existsByLogin(String login) {
-        log.debug("Проверка существования пользователя по логину: {}", login);
-        boolean exists = userRepository.existsByLogin(login);
-        log.debug("Результат проверки существования пользователя с логином '{}': {}", login, exists);
-        return exists;
+        log.info("Проверка существования пользователя по логину: {}", login);
+        log.debug("existsByLogin - входящий параметр login: {}", login);
+        boolean result = userRepository.existsByLogin(login);
+        log.debug("existsByLogin - результат: {}", result);
+        log.info("Результат existsByLogin для логина '{}': {}", login, result);
+        return result;
     }
 
     @Override
     public UserDto getUserByLogin(String login) {
         log.info("Получение пользователя по логину: {}", login);
-        UserDto userDto = userRepository.findByLogin(login)
-                .map(userMapper::toDto)
-                .orElseThrow(() -> {
-                    log.error("Пользователь с логином '{}' не найден", login);
-                    return new UserNotFoundException(login);
-                });
-        log.info("Пользователь с логином найден: {}", userDto);
+        log.debug("getUserByLogin - входящий параметр login: {}", login);
+        UserDto userDto = userMapper.toDto(userRepository.findByLogin(login)
+                .orElseThrow(() -> new UserNotFoundException(login)));
+        log.debug("getUserByLogin - найден пользователь: {}", userDto);
+        log.info("Пользователь найден: {}", userDto);
         return userDto;
     }
 
     @Override
     public UserDto getUserById(Long id) {
         log.info("Получение пользователя по id: {}", id);
-        UserDto userDto = userRepository.findById(id)
-                .map(userMapper::toDto)
-                .orElseThrow(() -> {
-                    log.error("Пользователь с id {} не найден", id);
-                    return new UserNotFoundException(id);
-                });
-        log.info("Пользователь с id найден: {}", userDto);
+        log.debug("getUserById - входящий параметр id: {}", id);
+        UserDto userDto = userMapper.toDto(userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id)));
+        log.debug("getUserById - найден пользователь: {}", userDto);
+        log.info("Пользователь найден: {}", userDto);
         return userDto;
     }
 
     @Override
     public List<AddressDto> getAddressListByUserId(Long userId) {
-        log.info("Получение адресов для пользователя id: {}", userId);
-        List<Address> addresses = addressRepository.findByUserId(userId);
-        List<AddressDto> addressDto = addresses.stream()
+        log.info("Получение адресов пользователя с id: {}", userId);
+        log.debug("getAddressListByUserId - входящий параметр userId: {}", userId);
+        List<AddressDto> addresses = addressRepository.findByUserId(userId)
+                .stream()
                 .map(addressMapper::toDto)
                 .toList();
-        log.info("Найдено {} адресов для пользователя с id {}", addressDto.size(), userId);
-        return addressDto;
+        log.debug("getAddressListByUserId - найдено адресов: {}", addresses.size());
+        log.info("Найдено адресов: {}", addresses.size());
+        return addresses;
     }
 
     @Override
     public PageContentDto<UserDto> findAll(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
-        log.info("Поиск всех пользователей с фильтрами: {} и пагинацией: {}", addressFilterDto, pageParamDto);
+        log.info("Поиск пользователей с фильтрами: {}, страница {}, размер {}", addressFilterDto, pageParamDto.pageNumber(), pageParamDto.pageSize());
+        log.debug("findAll - входящие параметры: pageParamDto={}, addressFilterDto={}", pageParamDto, addressFilterDto);
         Pageable pageable = PageRequest.of(pageParamDto.pageNumber() - 1, pageParamDto.pageSize());
         Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
         Page<Address> addresses = addressRepository.findAll(spec, pageable);
-        PageContentDto<UserDto> pageContentDto = convertToPageContentDto(addresses);
-        log.info("Найдено {} пользователей, соответствующих критериям", pageContentDto.content().size());
-        return pageContentDto;
+        PageContentDto<UserDto> result = convertToPageContentDto(addresses);
+        log.debug("findAll - найдено пользователей на странице: {}", result.content().size());
+        log.info("Найдено пользователей на странице: {}", result.content().size());
+        return result;
     }
 
     @Override
     @Transactional
     public UserDto save(UserInfoDto userInfoDto) {
-        log.info("Выполняется сохранение нового пользователя: {}", userInfoDto);
+        log.info("Сохранение пользователя: {}", userInfoDto);
+        log.debug("save - входящий параметр userInfoDto: {}", userInfoDto);
         User createdUser = userRepository.save(userMapper.toUser(userInfoDto));
         UserDto userDto = userMapper.toDto(createdUser);
-        log.info("Пользователь успешно сохранён: {}", userDto);
+        log.debug("save - сохранён пользователь: {}", userDto);
+        log.info("Пользователь сохранён: {}", userDto);
         return userDto;
     }
 
     @Override
     @Transactional
     public AddressDto addAddressByUserId(AddressCreateDto addressCreateDto) {
+        log.info("Добавление адреса: {}", addressCreateDto);
+        log.debug("addAddressByUserId - входящий параметр addressCreateDto: {}", addressCreateDto);
         Long userId = addressCreateDto.getUserId();
-        log.info("Добавление адреса для userId {}: {}", userId, addressCreateDto);
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("Пользователь с id {} не найден", userId);
-                    return new UserNotFoundException(userId);
-                });
+                .orElseThrow(() -> new UserNotFoundException(userId));
         Address address = addressMapper.toEntity(addressCreateDto);
         address.setUser(user);
         Address savedAddress = addressRepository.save(address);
         AddressDto addressDto = addressMapper.toDto(savedAddress);
-        log.info("Адрес успешно добавлен: {}", addressDto);
+        log.debug("addAddressByUserId - добавлен адрес: {}", addressDto);
+        log.info("Адрес добавлен: {}", addressDto);
         return addressDto;
     }
 
     @Override
     @Transactional
     public void deleteAddressById(Long id) {
-        log.info("Выполняется удаление адреса с id: {}", id);
-        addressRepository.findById(id).ifPresentOrElse(
-                address -> {
-                    addressRepository.delete(address);
-                    log.info("Адрес с id {} успешно удалён", id);
-                },
-                () -> log.warn("Адрес с id {} не найден для удаления", id)
-        );
+        log.info("Удаление адреса с id: {}", id);
+        log.debug("deleteAddressById - входящий параметр id: {}", id);
+        addressRepository.findById(id).ifPresent(addressRepository::delete);
+        log.debug("deleteAddressById - адрес с id {} удалён (если существовал)", id);
+        log.info("Адрес с id {} удалён (если существовал)", id);
     }
 
     @Override
     @Transactional
     public void deleteUserById(Long id) {
-        log.info("Выполняется удаление пользователя с id: {}", id);
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            log.info("Пользователь с id {} успешно удалён", id);
-        } else {
-            log.warn("Пользователь с id {} не найден для удаления", id);
-        }
+        log.info("Удаление пользователя с id: {}", id);
+        log.debug("deleteUserById - входящий параметр id: {}", id);
+        userRepository.deleteById(id);
+        log.debug("deleteUserById - пользователь с id {} удалён", id);
+        log.info("Пользователь с id {} удалён", id);
     }
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
-        log.debug("Выполняется преобразование Page<Address> в PageContentDto<UserDto>");
         Set<Long> userIds = page.getContent()
                 .stream()
                 .map(Address::getUser)
                 .map(BaseEntity::getId)
                 .collect(Collectors.toSet());
-        log.debug("Извлечены id пользователей из адресов: {}", userIds);
         List<UserDto> userDtoList = userRepository.findAllById(userIds)
                 .stream()
                 .map(userMapper::toDto)
@@ -174,7 +173,6 @@ public class UserServiceImpl implements UserService {
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements());
-        log.debug("Создан PageDto: {}", pageDto);
         return new PageContentDto<>(pageDto, userDtoList);
     }
 }
