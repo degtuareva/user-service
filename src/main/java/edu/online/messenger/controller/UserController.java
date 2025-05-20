@@ -73,7 +73,7 @@ public class UserController {
     public List<AddressDto> getAddressListByUserId(@PathVariable Long userId) {
         log.info("Получен запрос на получение списка адресов пользователя с id: {}", userId);
         List<AddressDto> addresses = userService.getAddressListByUserId(userId);
-        log.info("Возвращено {} адресов для пользователя с id {}", addresses.size(), userId);
+        log.info("Возвращен список {} адресов для пользователя с id {}", addresses.size(), userId);
         return addresses;
     }
 
