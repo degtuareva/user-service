@@ -26,7 +26,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,6 +77,10 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(pageParamDto.pageNumber() - 1, pageParamDto.pageSize());
         Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
         Page<Address> addresses = addressRepository.findAll(spec, pageable);
+        if (isFilterEmpty(addressFilterDto)) {
+            Page<User> users = userRepository.findAll(pageable);
+            return convertUserPageToDto(users);
+        }
         return convertToPageContentDto(addresses);
     }
 
@@ -108,6 +115,18 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    private boolean isFilterEmpty(AddressFilterDto addressFilterDto) {
+        return Arrays.stream(addressFilterDto.getClass().getRecordComponents())
+                .map(recordComponent -> {
+                    try {
+                        return recordComponent.getAccessor().invoke(addressFilterDto);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException("Ошибка доступа к полю " + recordComponent.getName(), e);
+                    }
+                })
+                .allMatch(Objects::isNull);
+    }
+
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
         Set<Long> userIds = page.getContent()
                 .stream()
@@ -115,6 +134,19 @@ public class UserServiceImpl implements UserService {
                 .map(BaseEntity::getId)
                 .collect(Collectors.toSet());
         List<UserDto> userDtoList = userRepository.findAllById(userIds)
+                .stream()
+                .map(userMapper::toDto)
+                .toList();
+        PageDto pageDto = new PageDto(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements());
+        return new PageContentDto<>(pageDto, userDtoList);
+    }
+
+    private PageContentDto<UserDto> convertUserPageToDto(Page<User> page) {
+        List<UserDto> userDtoList = page.getContent()
                 .stream()
                 .map(userMapper::toDto)
                 .toList();
