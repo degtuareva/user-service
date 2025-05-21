@@ -64,9 +64,9 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByLogin(String login) {
         log.info("Получение пользователя по логину: {}", login);
         User user = userRepository.findByLogin(login)
-                .orElseGet(() -> {
+                .orElseThrow(() -> {
                     UserNotFoundException ex = new UserNotFoundException(login);
-                    log.info(() -> "Ошибка: пользователь с логином " + login + " не найден", ex);
+                    log.info("Ошибка: пользователь с логином {} не найден", login, ex);
                     throw ex;
                 });
         UserDto userDto = userMapper.toDto(user);
@@ -78,9 +78,9 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(Long id) {
         log.info("Получение пользователя по id: {}", id);
         User user = userRepository.findById(id)
-                .orElseGet(() -> {
+                .orElseThrow(() -> {
                     UserNotFoundException ex = new UserNotFoundException(id);
-                    log.info(() -> "Ошибка: пользователь с id " + id + " не найден", ex);
+                    log.info("Ошибка: пользователь с id {} не найден", id, ex);
                     throw ex;
                 });
         UserDto userDto = userMapper.toDto(user);
@@ -132,9 +132,9 @@ public class UserServiceImpl implements UserService {
         log.info("Добавление адреса: {}", addressCreateDto);
         Long userId = addressCreateDto.getUserId();
         User user = userRepository.findById(userId)
-                .orElseGet(() -> {
+                .orElseThrow(() -> {
                     UserNotFoundException ex = new UserNotFoundException(userId);
-                    log.info(() -> "Ошибка: пользователь с id " + userId + " не найден", ex);
+                    log.info("Ошибка: пользователь с id {} не найден", userId, ex);
                     throw ex;
                 });
         Address address = addressMapper.toEntity(addressCreateDto);
