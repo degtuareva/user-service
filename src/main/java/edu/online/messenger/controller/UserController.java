@@ -10,7 +10,6 @@ import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import edu.online.messenger.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/users")
 @AllArgsConstructor
@@ -35,35 +33,30 @@ public class UserController {
     @GetMapping("existence/id/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public boolean existsById(@PathVariable Long userId) {
-        log.info("Проверка существования пользователя по id: {}", userId);
         return userService.existsById(userId);
     }
 
     @GetMapping("/existence/login/{login}")
     @ResponseStatus(HttpStatus.OK)
     public boolean existsByLogin(@PathVariable String login) {
-        log.info("Проверка существования пользователя по логину: {}", login);
         return userService.existsByLogin(login);
     }
 
     @GetMapping("/login/{login}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUserByLogin(@PathVariable String login) {
-        log.info("Получение пользователя по логину: {}", login);
         return userService.getUserByLogin(login);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUserById(@PathVariable Long id) {
-        log.info("Получение пользователя по id: {}", id);
         return userService.getUserById(id);
     }
 
     @GetMapping("/address/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public List<AddressDto> getAddressListByUserId(@PathVariable Long userId) {
-        log.info("Получение адресов пользователя с id: {}", userId);
         return userService.getAddressListByUserId(userId);
     }
 
@@ -80,8 +73,6 @@ public class UserController {
             @RequestParam(value = "housing", required = false) String housing,
             @RequestParam(value = "apartment", required = false) String apartment
     ) {
-        log.info("Поиск пользователей с фильтрами country={}, postalCode={}, city={}, street={}, house={}, housing={}, apartment={}, pageNumber={}, pageSize={}",
-                country, postalCode, city, street, house, housing, apartment, pageNumber, pageSize);
         return userService.findAll(
                 new PageParamDto(pageNumber, pageSize),
                 new AddressFilterDto(country, postalCode, city, street, house, housing, apartment));
@@ -90,28 +81,24 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto save(@Valid @RequestBody UserInfoDto userInfoDto) {
-        log.info("Сохранение пользователя: {}", userInfoDto);
         return userService.save(userInfoDto);
     }
 
     @PostMapping("/address")
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDto addAddressByUserId(@Valid @RequestBody AddressCreateDto addressCreateDto) {
-        log.info("Добавление адреса: {}", addressCreateDto);
         return userService.addAddressByUserId(addressCreateDto);
     }
 
     @DeleteMapping("/address/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAddressById(@PathVariable Long id) {
-        log.info("Удаление адреса с id: {}", id);
         userService.deleteAddressById(id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable Long id) {
-        log.info("Удаление пользователя с id: {}", id);
         userService.deleteUserById(id);
     }
 }
