@@ -47,17 +47,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean existsById(Long id) {
         log.info("Проверка существования пользователя по id: {}", id);
-        boolean exists = userRepository.existsById(id);
-        log.debug("Результат проверки существования пользователя по id {}: {}", id, exists);
-        return exists;
+        return userRepository.existsById(id);
     }
 
     @Override
     public boolean existsByLogin(String login) {
         log.info("Проверка существования пользователя по логину: {}", login);
-        boolean exists = userRepository.existsByLogin(login);
-        log.debug("Результат проверки существования пользователя по логину {}: {}", login, exists);
-        return exists;
+        return userRepository.existsByLogin(login);
     }
 
     @Override
@@ -84,11 +80,10 @@ public class UserServiceImpl implements UserService {
     public List<AddressDto> getAddressListByUserId(Long userId) {
         log.info("Получение списка адресов для пользователя с id: {}", userId);
         List<Address> addresses = addressRepository.findByUserId(userId);
-        List<AddressDto> result = addresses.stream()
+        log.debug("Найдено {} адресов для пользователя с id: {}", addresses.size(), userId);
+        return addresses.stream()
                 .map(addressMapper::toDto)
                 .toList();
-        log.debug("Найдено {} адресов для пользователя с id {}", result.size(), userId);
-        return result;
     }
 
     @Override
@@ -115,10 +110,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto save(UserInfoDto userInfoDto) {
         log.info("Создание пользователя : {}", userInfoDto);
-        User createdUser = userRepository.save(userMapper.toUser(userInfoDto));
-        UserDto userDto = userMapper.toDto(createdUser);
-        log.debug("Пользователь успешно coздан: {}", userDto);
-        return userDto;
+        return userMapper.toDto(userRepository.save(userMapper.toUser(userInfoDto)));
     }
 
     @Override
@@ -143,13 +135,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteAddressById(Long id) {
         log.info("Удаление адреса с id: {}", id);
-        addressRepository.findById(id).ifPresentOrElse(
-                address -> {
-                    addressRepository.delete(address);
-                    log.debug("Адрес с id {} удалён", id);
-                },
-                () -> log.warn("Адрес с id {} не найден для удаления", id)
-        );
+        addressRepository.deleteById(id);
     }
 
     @Override
@@ -157,7 +143,6 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
         log.info("Удаление пользователя с id: {}", id);
         userRepository.deleteById(id);
-        log.debug("Пользователь с id:{} удален", id);
     }
 
     private boolean isFilterEmpty(AddressFilterDto addressFilterDto) {
