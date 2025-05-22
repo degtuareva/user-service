@@ -20,11 +20,3 @@ logging:
     org.springframework: WARN
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
-management:
-  endpoints:
-    web:
-      exposure:
-        include: httptrace
-  endpoint:
-    httptrace:
-      enabled: true
