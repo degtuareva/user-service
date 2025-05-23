@@ -20,6 +20,7 @@ import edu.online.messenger.service.UserService;
 import edu.online.messenger.specification.AddressSpecification;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -44,29 +46,41 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean existsById(Long id) {
+        log.info("Проверка существования пользователя по id: {}", id);
         return userRepository.existsById(id);
     }
 
     @Override
     public boolean existsByLogin(String login) {
+        log.info("Проверка существования пользователя по логину: {}", login);
         return userRepository.existsByLogin(login);
     }
 
     @Override
     public UserDto getUserByLogin(String login) {
+        log.info("Поиск пользователя по логину: {}", login);
         return userMapper.toDto(userRepository.findByLogin(login)
-                .orElseThrow(() -> new UserNotFoundException(login)));
+                .orElseThrow(() -> {
+                    log.error("Пользователь с логином {} не найден", login);
+                    return new UserNotFoundException(login);
+                }));
     }
 
     @Override
     public UserDto getUserById(Long id) {
+        log.info("Поиск пользователя по id: {}", id);
         return userMapper.toDto(userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id)));
+                .orElseThrow(() -> {
+                    log.error("Пользователь с id {} не найден", id);
+                    return new UserNotFoundException(id);
+                }));
     }
 
     @Override
     public List<AddressDto> getAddressListByUserId(Long userId) {
+        log.info("Получение списка адресов для пользователя с id: {}", userId);
         List<Address> addresses = addressRepository.findByUserId(userId);
+        log.debug("Найдено {} адресов для пользователя с id: {}", addresses.size(), userId);
         return addresses.stream()
                 .map(addressMapper::toDto)
                 .toList();
@@ -74,60 +88,80 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageContentDto<UserDto> findAll(PageParamDto pageParamDto, AddressFilterDto addressFilterDto) {
+        log.info("Поиск пользователей с фильтрами: {}, страница {}, размер {}",
+                addressFilterDto, pageParamDto.pageNumber(), pageParamDto.pageSize());
         Pageable pageable = PageRequest.of(pageParamDto.pageNumber() - 1, pageParamDto.pageSize());
+
         Specification<Address> spec = AddressSpecification.findAll(addressFilterDto);
         Page<Address> addresses = addressRepository.findAll(spec, pageable);
         if (isFilterEmpty(addressFilterDto)) {
+            log.info("Фильтр пуст, возвращаем всех пользователей без фильтрации");
             Page<User> users = userRepository.findAll(pageable);
-            return convertUserPageToDto(users);
+            PageContentDto<UserDto> pageContentDto = convertUserPageToDto(users);
+            log.debug("Найдено пользователей: {}", pageContentDto.content().size());
+            return pageContentDto;
         }
-        return convertToPageContentDto(addresses);
+        PageContentDto<UserDto> pageContentDto = convertToPageContentDto(addresses);
+        log.debug("Найдено {} пользователей по фильтру адресов", pageContentDto.content().size());
+        return pageContentDto;
     }
 
     @Override
     @Transactional
     public UserDto save(UserInfoDto userInfoDto) {
-        User createdUser = userRepository.save(userMapper.toUser(userInfoDto));
-        return userMapper.toDto(createdUser);
+        log.info("Создание пользователя : {}", userInfoDto);
+        return userMapper.toDto(userRepository.save(userMapper.toUser(userInfoDto)));
     }
 
     @Override
     @Transactional
     public AddressDto addAddressByUserId(AddressCreateDto addressCreateDto) {
         Long userId = addressCreateDto.getUserId();
+        log.info("Добавление адреса для пользователя с id: {}", userId);
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> {
+                    log.error("Пользователь с id {} не найден при добавлении адреса", userId);
+                    return new UserNotFoundException(userId);
+                });
         Address address = addressMapper.toEntity(addressCreateDto);
         address.setUser(user);
         Address savedAddress = addressRepository.save(address);
-        return addressMapper.toDto(savedAddress);
+        AddressDto addressDto = addressMapper.toDto(savedAddress);
+        log.debug("Адрес успешно добавлен с id: {} для пользователя с id:{}", addressDto.getId(), userId);
+        return addressDto;
     }
 
     @Override
     @Transactional
     public void deleteAddressById(Long id) {
-        addressRepository.findById(id).ifPresent(addressRepository::delete);
+        log.info("Удаление адреса с id: {}", id);
+        addressRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void deleteUserById(Long id) {
+        log.info("Удаление пользователя с id: {}", id);
         userRepository.deleteById(id);
     }
 
     private boolean isFilterEmpty(AddressFilterDto addressFilterDto) {
-        return Arrays.stream(addressFilterDto.getClass().getRecordComponents())
+        log.debug("Проверка пустоты фильтра адресов: {}", addressFilterDto);
+        boolean empty = Arrays.stream(addressFilterDto.getClass().getRecordComponents())
                 .map(recordComponent -> {
                     try {
                         return recordComponent.getAccessor().invoke(addressFilterDto);
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        throw new RuntimeException("Ошибка доступа к полю " + recordComponent.getName(), e);
+                        throw new RuntimeException("Ошибка доступа к полю {} фильтра адресов" + recordComponent.getName());
                     }
                 })
                 .allMatch(Objects::isNull);
+        log.debug("Проверка фильтра на пустоту: {}, фильтр: {}", empty, addressFilterDto);
+        return empty;
     }
 
     private PageContentDto<UserDto> convertToPageContentDto(Page<Address> page) {
+        log.debug("Конвертация страницы адресов в DTO пользователей");
         Set<Long> userIds = page.getContent()
                 .stream()
                 .map(Address::getUser)
@@ -142,10 +176,12 @@ public class UserServiceImpl implements UserService {
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements());
+        log.debug("Сформирована страница с {} пользователями", userDtoList.size());
         return new PageContentDto<>(pageDto, userDtoList);
     }
 
     private PageContentDto<UserDto> convertUserPageToDto(Page<User> page) {
+        log.debug("Конвертация страницы пользователей в DTO");
         List<UserDto> userDtoList = page.getContent()
                 .stream()
                 .map(userMapper::toDto)
@@ -155,6 +191,7 @@ public class UserServiceImpl implements UserService {
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements());
+        log.debug("Сформирована страница с {} пользователями", userDtoList.size());
         return new PageContentDto<>(pageDto, userDtoList);
     }
 }
