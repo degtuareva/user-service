@@ -16,3 +16,10 @@ spring:
       properties:
         hibernate:
           format_sql: true
+logging:
+  level:
+    root: INFO
+    edu.online.messenger: DEBUG
+    org.springframework: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
