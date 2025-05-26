@@ -1,0 +1,34 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--Added entity User-->
+    <changeSet id="20250526204356-1" author="lvergunov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="character varying (50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="character varying (50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="character varying (50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_visit_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
