@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/edu_online_messenger_prod
-    username: prod_username
-    password: prod_password
+    url: jdbc:postgresql://localhost:5432/edu_online_messenger
+    username: root
+    password: root
 
   jpa:
     hibernate:
