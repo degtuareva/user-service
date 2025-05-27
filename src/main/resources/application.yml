@@ -3,13 +3,14 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/edu-online-messenger
+    url: jdbc:postgresql://localhost:5432/edu_online_messenger
     username: root
     password: root
   jpa:
     liquibase:
       enabled: true
       change-log: classpath:changelog-master.xml
+      drop-first: true
     hibernate:
       ddl-auto: update
       show-sql: true
