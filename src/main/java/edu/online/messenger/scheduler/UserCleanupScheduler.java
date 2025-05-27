@@ -21,14 +21,12 @@ public class UserCleanupScheduler {
     @Scheduled(cron = "0 0 2 * * *")
     @Transactional
     public void deleteInactiveUsers() {
-        LocalDateTime threshold = LocalDateTime.now().minusYears(3);
-        List<User> usersToDelete = userRepository.findByLastVisitDateBefore(threshold);
-        int count = usersToDelete.size();
-        if (count > 0) {
-            userRepository.deleteByLastVisitDateBefore(threshold);
-            log.info("Удалено {} пользователей с lastVisitDate до {}", count, threshold);
+        List<User> usersToDelete = userRepository.findByLastVisitDateBefore(LocalDateTime.now().minusYears(3));
+        if (!usersToDelete.isEmpty()) {
+            userRepository.deleteAll(usersToDelete);
+            log.info("Удалено {} пользователей", usersToDelete.size());
         } else {
-            log.info("Нет пользователей для удаления по состоянию на {}", threshold);
+            log.info("Нет пользователей для удаления");
         }
     }
 }

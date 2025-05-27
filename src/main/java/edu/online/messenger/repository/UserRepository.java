@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    void deleteByLastVisitDateBefore(LocalDateTime threshold);
-
     List<User> findByLastVisitDateBefore(LocalDateTime threshold);
 
     boolean existsByLogin(String login);
