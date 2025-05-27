@@ -2,7 +2,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
-    <changeSet id="20250526215123-1" author="lvergunov">
+    <changeSet id="20250526215123" author="lvergunov">
         <insert tableName="users">
             <column name="login" value="UserLoginOne"/>
             <column name="password" value="PasswordTestOne"/>
