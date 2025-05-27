@@ -30,6 +30,10 @@
 
 ## Версии
 
+### version 15.0
+
+### Swagger (профиль) → http://localhost:9087/swagger-ui.html
+
 ### version 14.0
 
 Создание API по получению пользователей с возможностью пагинации и фильтрации по адресным данным
@@ -121,7 +125,8 @@ http://localhost:9087/api/users/existence/login/user_7@gmail.com
 true/false
 ```
 
-Bad request 400, если в качестве user_id переданы не валидные данные. Исключение отлавливается обработчиком ExceptionApiHandler.
+Bad request 400, если в качестве user_id переданы не валидные данные. Исключение отлавливается обработчиком
+ExceptionApiHandler.
 
 #### Получение пользователя по логину. На входе логин пользователя, на выходе UserDto.
 

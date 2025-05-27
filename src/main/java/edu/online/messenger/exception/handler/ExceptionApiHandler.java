@@ -28,6 +28,4 @@ public class ExceptionApiHandler {
         return new ResponseEntity<>(new ErrorDto(e.getMessage(), HttpStatus.NOT_FOUND.value()),
                 HttpStatus.NOT_FOUND);
     }
-
-
 }

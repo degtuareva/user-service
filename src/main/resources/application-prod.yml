@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/edu_online_messenger
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      show-sql: false
+
+  liquibase:
+    enabled: true
+    change-log: classpath:changelog-master.xml
+    drop-first: true
+
+logging:
+  level:
+    root: INFO
+    edu.online.messenger: INFO
+    org.springframework: WARN
+    org.springdoc: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
