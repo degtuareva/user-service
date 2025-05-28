@@ -22,11 +22,7 @@ public class UserCleanupScheduler {
     @Transactional
     public void deleteInactiveUsers() {
         List<User> usersToDelete = userRepository.findByLastVisitDateBefore(LocalDateTime.now().minusYears(3));
-        if (!usersToDelete.isEmpty()) {
-            userRepository.deleteAll(usersToDelete);
-            log.info("Удалено {} пользователей", usersToDelete.size());
-        } else {
-            log.info("Нет пользователей для удаления");
-        }
+        userRepository.deleteAll(usersToDelete);
+        log.info("Удалено {} пользователей", usersToDelete.size());
     }
 }
