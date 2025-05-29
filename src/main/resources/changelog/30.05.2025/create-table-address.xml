@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
-    <changeSet id="20250526215123" author="lvergunov">
+    <changeSet id="300520250024" author="olga">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="address"/>
