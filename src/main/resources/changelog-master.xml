@@ -6,4 +6,6 @@
              relativeToChangelogFile="false"/>
     <include file="changelog/26.05.2025/insert-table-users.xml"
              relativeToChangelogFile="false"/>
+    <include file="changelog/29.05.2025/insert-users-5-roles.xml"
+             relativeToChangelogFile="false"/>
 </databaseChangeLog>
