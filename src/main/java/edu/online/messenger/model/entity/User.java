@@ -9,6 +9,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,9 +27,12 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends BaseEntity {
 
+    @NotBlank(message = "Логин не должен быть пустым")
     @Column(length = 50, nullable = false, unique = true)
     private String login;
 
+    @NotBlank(message = "Пароль не должен быть пустым")
+    @Size(min = 6, message = "Пароль должен быть минимум 6 символов")
     @Column(length = 50, nullable = false)
     private String password;
 
