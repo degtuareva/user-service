@@ -4,3 +4,16 @@ server:
 spring:
   profiles:
     active: dev
+  messages:
+    basename: messages
+    encoding: UTF-8
+
+  http:
+    encoding:
+      enable:true
+      charset:UTF-8
+      forse:true
+
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true

@@ -36,12 +36,11 @@ public class ExceptionApiHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException e) {
-        log.error(e.getLocalizedMessage());
         Map<String, String> errors = new HashMap<>();
-
         e.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
+            log.error("Validation error on field '{}': {}", fieldName, errorMessage);
             errors.put(fieldName, errorMessage);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
