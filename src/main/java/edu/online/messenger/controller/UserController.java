@@ -62,7 +62,7 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public PageContentDto<UserDto> findAll(
+    public PageContentDto<UserDto> findAll(@Valid
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize,
             @RequestParam(value = "country", required = false) String country,
