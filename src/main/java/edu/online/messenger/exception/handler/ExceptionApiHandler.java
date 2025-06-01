@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -27,5 +28,19 @@ public class ExceptionApiHandler {
         log.error(e.getLocalizedMessage());
         return new ResponseEntity<>(new ErrorDto(e.getMessage(), HttpStatus.NOT_FOUND.value()),
                 HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorDto> handleUserNotFoundException(MethodArgumentNotValidException e) {
+        log.error(e.getLocalizedMessage());
+        return new ResponseEntity<>(new ErrorDto(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorDto> handleUserNotFoundException(IllegalArgumentException e) {
+        log.error(e.getLocalizedMessage());
+        return new ResponseEntity<>(new ErrorDto(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.BAD_REQUEST);
     }
 }
