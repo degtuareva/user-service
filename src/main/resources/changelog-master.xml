@@ -10,4 +10,6 @@
              relativeToChangelogFile="false"/>
     <include file="/changelog/30.05.2025/create-table-address.xml"
              relativeToChangelogFile="false"/>
+    <include file="/changelog/02.06.2025/insert-data-in-table-address.xml"
+             relativeToChangelogFile="false"/>
 </databaseChangeLog>
