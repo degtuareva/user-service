@@ -1,0 +1,116 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <changeSet id="020620252130" author="Tolik Solomin">
+        <insert tableName="address">
+            <column name="user_id" value="4"/>
+            <column name="apartment" value="11"/>
+            <column name="housing" value="2"/>
+            <column name="house" value="6"/>
+            <column name="street" value="Pushkina"/>
+            <column name="city" value="Saint Petersburg"/>
+            <column name="postal_code" value="101000"/>
+            <column name="country" value="Russia"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="user_id" value="4"/>
+            <column name="apartment" value="9"/>
+            <column name="housing" value="1"/>
+            <column name="house" value="19"/>
+            <column name="street" value="Tolstogo"/>
+            <column name="city" value="Bangalore"/>
+            <column name="postal_code" value="560001"/>
+            <column name="country" value="India"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="user_id" value="5"/>
+            <column name="apartment" value="45"/>
+            <column name="housing" value="22"/>
+            <column name="house" value="30"/>
+            <column name="street" value="Dostoevskogo"/>
+            <column name="city" value="Shanghai"/>
+            <column name="postal_code" value="100000"/>
+            <column name="country" value="China"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="user_id" value="5"/>
+            <column name="apartment" value="77"/>
+            <column name="housing" value="9"/>
+            <column name="house" value="1"/>
+            <column name="street" value="Chekhova"/>
+            <column name="city" value="Marseille"/>
+            <column name="postal_code" value="750001"/>
+            <column name="country" value="France"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="user_id" value="6"/>
+            <column name="apartment" value="17"/>
+            <column name="housing" value="21"/>
+            <column name="house" value="7"/>
+            <column name="street" value="Gogolya"/>
+            <column name="city" value="Busan"/>
+            <column name="postal_code" value="200000"/>
+            <column name="country" value="South Korea"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="user_id" value="6"/>
+            <column name="apartment" value="111"/>
+            <column name="housing" value="29"/>
+            <column name="house" value="31"/>
+            <column name="street" value="Lermontova"/>
+            <column name="city" value="Lahore"/>
+            <column name="postal_code" value="400001"/>
+            <column name="country" value="Pakistan"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="user_id" value="7"/>
+            <column name="apartment" value="90"/>
+            <column name="housing" value="44"/>
+            <column name="house" value="8"/>
+            <column name="street" value="Turgeneva"/>
+            <column name="city" value="Osaka"/>
+            <column name="postal_code" value="110001"/>
+            <column name="country" value="Japan"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="user_id" value="7"/>
+            <column name="apartment" value="9"/>
+            <column name="housing" value="22"/>
+            <column name="house" value="10"/>
+            <column name="street" value="Nekrasova"/>
+            <column name="city" value="Rio de Janeiro"/>
+            <column name="postal_code" value="300001"/>
+            <column name="country" value="Brazil"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="user_id" value="8"/>
+            <column name="apartment" value="20"/>
+            <column name="housing" value="12"/>
+            <column name="house" value="13"/>
+            <column name="street" value="Bloka"/>
+            <column name="city" value="Hamburg"/>
+            <column name="postal_code" value="600001"/>
+            <column name="country" value="Germany"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="user_id" value="8"/>
+            <column name="apartment" value="55"/>
+            <column name="housing" value="4"/>
+            <column name="house" value="2"/>
+            <column name="street" value="Pasternaka"/>
+            <column name="city" value="Melbourne"/>
+            <column name="postal_code" value="123456"/>
+            <column name="country" value="Australia"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
