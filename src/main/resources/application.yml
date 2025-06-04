@@ -1,5 +1,10 @@
 server:
   port: 9087
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
 
 spring:
   profiles:
@@ -7,12 +12,6 @@ spring:
   messages:
     basename: messages
     encoding: UTF-8
-
-  http:
-    encoding:
-      enable:true
-      charset:UTF-8
-      forse:true
 
   jackson:
     serialization:

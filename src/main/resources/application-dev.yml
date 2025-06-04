@@ -6,6 +6,7 @@ spring:
     password: root
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: validate
       show-sql: true
@@ -32,3 +33,10 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     enabled: true
+
+server:
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
