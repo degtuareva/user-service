@@ -32,6 +32,12 @@
 
 ### version 15.0
 
+Наложение валидации на USerInfoDto
+
+##### Возможные исключения:
+
+В случае, если пользователь не найден, выбрасываем исключение handleValidationException с телом ответа в формате json.
+
 ### Swagger (профиль) → http://localhost:9087/swagger-ui.html
 
 ### version 14.0
@@ -792,3 +798,61 @@ http://localhost:9087/api/users/address/7
 204 No Content
 
 ##### Исключений в данном эндпоинте не предусмотрено.
+
+##### Запрос:
+
+```http request
+http://localhost:9087/api/users
+```
+
+##### Тело запроса:
+
+```json
+{
+  "login": "Olga@gmail.com",
+  "password": "Olga74@gmail.com",
+  "role": "USER"
+}
+```
+
+##### Ответ:
+
+```Json
+{
+  "id": 4,
+  "login": "Olga@gmail.com",
+  "password": "Olga74",
+  "role": "USER",
+  "createDate": "2025-05-31T19:53:22.899199",
+  "lastVisitDate": "2025-05-31T19:53:22.900199"
+}
+```
+
+#### При ошибках валидации,если данные не заполнены или пароль не соответствует заданной длине -6 символов,выбрасывается исключение  с телом ответа
+
+##### Запрос:
+
+```http request
+http://localhost:9087/api/users
+```
+
+##### Тело запроса:
+
+```json
+{
+  "login": "",
+  "password": "Olga00000000",
+  "role": "USER"
+}
+```
+
+##### Ответ:
+
+```json
+{
+  "password": "Пароль должен содержать 6 символов",
+  "login": "Логин не должен быть пустым"
+}
+```
+
+##### Возвращаемый ответ: HTTP-ответ со статусом 400 Bad Request

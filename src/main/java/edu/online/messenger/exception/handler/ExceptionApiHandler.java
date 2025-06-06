@@ -35,6 +35,13 @@ public class ExceptionApiHandler {
                 HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorDto> handleUserNotFoundException(HttpMessageNotReadableException e) {
+        log.error(e.getLocalizedMessage());
+        return new ResponseEntity<>(new ErrorDto(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
@@ -45,19 +52,5 @@ public class ExceptionApiHandler {
             errors.put(fieldName, errorMessage);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorDto> handleUserNotFoundException(IllegalArgumentException e) {
-        log.error(e.getLocalizedMessage());
-        return new ResponseEntity<>(new ErrorDto(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()),
-                HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorDto> handleUserNotFoundException(HttpMessageNotReadableException e) {
-        log.error(e.getLocalizedMessage());
-        return new ResponseEntity<>(new ErrorDto(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()),
-                HttpStatus.BAD_REQUEST);
     }
 }
