@@ -35,13 +35,6 @@ public class ExceptionApiHandler {
                 HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorDto> handleUserNotFoundException(IllegalArgumentException e) {
-        log.error(e.getLocalizedMessage());
-        return new ResponseEntity<>(new ErrorDto(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()),
-                HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorDto> handleUserNotFoundException(HttpMessageNotReadableException e) {
         log.error(e.getLocalizedMessage());
