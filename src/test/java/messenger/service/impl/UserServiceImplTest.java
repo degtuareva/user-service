@@ -1,4 +1,4 @@
-package messenger.service.impl.impl;
+package messenger.service.impl;
 
 import edu.online.messenger.mapper.AddressMapper;
 import edu.online.messenger.model.dto.AddressDto;
