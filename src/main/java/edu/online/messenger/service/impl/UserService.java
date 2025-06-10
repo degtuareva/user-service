@@ -1,4 +1,4 @@
-package edu.online.messenger.service;
+package edu.online.messenger.service.impl;
 
 import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;

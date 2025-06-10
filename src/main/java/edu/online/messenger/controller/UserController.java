@@ -7,7 +7,7 @@ import edu.online.messenger.model.dto.UserInfoDto;
 import edu.online.messenger.model.dto.page.PageContentDto;
 import edu.online.messenger.model.dto.page.PageParamDto;
 import edu.online.messenger.model.entity.dto.AddressFilterDto;
-import edu.online.messenger.service.UserService;
+import edu.online.messenger.service.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -63,15 +63,15 @@ public class UserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public PageContentDto<UserDto> findAll(@Valid
-            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize,
-            @RequestParam(value = "country", required = false) String country,
-            @RequestParam(value = "postalCode", required = false) String postalCode,
-            @RequestParam(value = "city", required = false) String city,
-            @RequestParam(value = "street", required = false) String street,
-            @RequestParam(value = "house", required = false) String house,
-            @RequestParam(value = "housing", required = false) String housing,
-            @RequestParam(value = "apartment", required = false) String apartment
+                                           @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+                                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize,
+                                           @RequestParam(value = "country", required = false) String country,
+                                           @RequestParam(value = "postalCode", required = false) String postalCode,
+                                           @RequestParam(value = "city", required = false) String city,
+                                           @RequestParam(value = "street", required = false) String street,
+                                           @RequestParam(value = "house", required = false) String house,
+                                           @RequestParam(value = "housing", required = false) String housing,
+                                           @RequestParam(value = "apartment", required = false) String apartment
     ) {
         return userService.findAll(
                 new PageParamDto(pageNumber, pageSize),
