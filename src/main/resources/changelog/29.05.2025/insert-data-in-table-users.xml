@@ -7,30 +7,40 @@
             <column name="login" value="Tolik"/>
             <column name="password" value="password1"/>
             <column name="role" value="USER"/>
+            <column name="create_date" value="2025-05-29T17:30:00"/>
+            <column name="last_visit_date" value="2025-06-09T20:30:00"/>
         </insert>
 
         <insert tableName="users">
             <column name="login" value="Olya"/>
             <column name="password" value="password2"/>
             <column name="role" value="USER"/>
+            <column name="create_date" value="2025-05-29T17:35:00"/>
+            <column name="last_visit_date" value="2025-06-09T20:35:00"/>
         </insert>
 
         <insert tableName="users">
             <column name="login" value="Leonid"/>
             <column name="password" value="password3"/>
             <column name="role" value="ADMIN"/>
+            <column name="create_date" value="2025-05-29T17:40:00"/>
+            <column name="last_visit_date" value="2025-06-09T20:40:00"/>
         </insert>
 
         <insert tableName="users">
             <column name="login" value="Alex"/>
             <column name="password" value="password4"/>
             <column name="role" value="MANAGER"/>
+            <column name="create_date" value="2025-05-29T17:45:00"/>
+            <column name="last_visit_date" value="2025-06-09T20:45:00"/>
         </insert>
 
         <insert tableName="users">
             <column name="login" value="Maria"/>
             <column name="password" value="password5"/>
             <column name="role" value="MANAGER"/>
+            <column name="create_date" value="2025-05-29T17:50:00"/>
+            <column name="last_visit_date" value="2025-06-09T20:50:00"/>
         </insert>
     </changeSet>
 </databaseChangeLog>
