@@ -7,7 +7,7 @@ import edu.online.messenger.model.dto.UserInfoDto;
 import edu.online.messenger.model.dto.page.PageContentDto;
 import edu.online.messenger.model.dto.page.PageParamDto;
 import edu.online.messenger.model.entity.dto.AddressFilterDto;
-import edu.online.messenger.service.impl.UserService;
+import edu.online.messenger.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

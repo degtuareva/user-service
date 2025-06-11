@@ -1,4 +1,4 @@
-package edu.online.messenger.service.impl.impl;
+package edu.online.messenger.service.impl;
 
 import edu.online.messenger.exception.UserNotFoundException;
 import edu.online.messenger.mapper.AddressMapper;
@@ -16,7 +16,7 @@ import edu.online.messenger.model.entity.dto.AddressFilterDto;
 import edu.online.messenger.model.entity.parent.BaseEntity;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
-import edu.online.messenger.service.impl.UserService;
+import edu.online.messenger.service.UserService;
 import edu.online.messenger.specification.AddressSpecification;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
