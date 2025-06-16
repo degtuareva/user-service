@@ -3,8 +3,11 @@ package edu.online.messenger.service.impl;
 import edu.online.messenger.mapper.AddressMapper;
 import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.entity.Address;
+import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
+import edu.online.messenger.util.AddressDtoTestBuilder;
+import edu.online.messenger.util.AddressTestBuilder;
 import edu.online.messenger.util.UserTestBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,20 +40,18 @@ public class UserServiceImplTest {
     private AddressMapper addressMapper;
 
     @InjectMocks
-    private UserServiceImpl userServiceImpl;
-
-    private final UserTestBuilder testBuilder = UserTestBuilder.builder().build();
+    private UserServiceImpl userService;
 
     @Test
     void existsByIdShouldReturnTrueWhenUserExists() {
-        Long userId = 15L;
+        User user = UserTestBuilder.builder().withId(15L).build().buildUser();
 
-        when(userRepository.existsById(userId)).thenReturn(true);
+        when(userRepository.existsById(user.getId())).thenReturn(true);
 
-        boolean result = userServiceImpl.existsById(userId);
+        boolean result = userService.existsById(user.getId());
 
         assertTrue(result);
-        verify(userRepository, times(1)).existsById(userId);
+        verify(userRepository, times(1)).existsById(user.getId());
     }
 
     @Test
@@ -59,7 +60,7 @@ public class UserServiceImplTest {
 
         when(userRepository.existsById(userId)).thenReturn(false);
 
-        boolean result = userServiceImpl.existsById(userId);
+        boolean result = userService.existsById(userId);
 
         assertFalse(result);
         verify(userRepository, times(1)).existsById(userId);
@@ -69,23 +70,31 @@ public class UserServiceImplTest {
     void getAddressListByUserIdShouldReturnAddressDtoListWhenAddressExist() {
         Long userId = 5L;
 
-        List<Address> addresses = testBuilder.buildAddressList();
-        List<AddressDto> expectedDto = testBuilder.buildAddressDtoList();
+        List<Address> addresses = List.of(
+                AddressTestBuilder.builder().withId(1L).build().buildAddress(),
+                AddressTestBuilder.builder().withId(2L).build().buildAddress()
+        );
+
+        List<AddressDto> expectedDto = List.of(
+                AddressDtoTestBuilder.builder().withId(1L).build().buildAddressDto(),
+                AddressDtoTestBuilder.builder().withId(2L).build().buildAddressDto()
+        );
 
         when(addressRepository.findByUserId(userId)).thenReturn(addresses);
         when(addressMapper.toDto(any(Address.class))).thenAnswer(invocation -> {
             Address address = invocation.getArgument(0);
             return expectedDto.stream()
-                    .filter(addressDto -> addressDto.getId().equals(address.getId()))
+                    .filter(dto -> dto.getId().equals(address.getId()))
                     .findFirst()
                     .orElseThrow();
         });
 
-        List<AddressDto> addressDtoList = userServiceImpl.getAddressListByUserId(userId);
+        List<AddressDto> addressDtoList = userService.getAddressListByUserId(userId);
 
         assertEquals(expectedDto.size(), addressDtoList.size());
         assertEquals(expectedDto.get(0), addressDtoList.get(0));
         assertEquals(expectedDto.get(1), addressDtoList.get(1));
+
         verify(addressRepository, times(1)).findByUserId(userId);
         verify(addressMapper, times(addresses.size())).toDto(any(Address.class));
     }
@@ -96,9 +105,10 @@ public class UserServiceImplTest {
 
         when(addressRepository.findByUserId(userId)).thenReturn(Collections.emptyList());
 
-        List<AddressDto> addressDtoList = userServiceImpl.getAddressListByUserId(userId);
+        List<AddressDto> addressDtoList = userService.getAddressListByUserId(userId);
 
         assertTrue(addressDtoList.isEmpty());
+
         verify(addressRepository, times(1)).findByUserId(userId);
         verify(addressMapper, never()).toDto(any());
     }
