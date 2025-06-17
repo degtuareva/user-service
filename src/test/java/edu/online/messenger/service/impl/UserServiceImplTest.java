@@ -6,7 +6,6 @@ import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
 import edu.online.messenger.repository.UserRepository;
-import edu.online.messenger.util.AddressDtoTestBuilder;
 import edu.online.messenger.util.AddressTestBuilder;
 import edu.online.messenger.util.UserTestBuilder;
 import org.junit.jupiter.api.Test;
@@ -76,15 +75,15 @@ public class UserServiceImplTest {
         );
 
         List<AddressDto> expectedDto = List.of(
-                AddressDtoTestBuilder.builder().withId(1L).build().buildAddressDto(),
-                AddressDtoTestBuilder.builder().withId(2L).build().buildAddressDto()
+                AddressTestBuilder.builder().withId(1L).build().buildAddressDto(),
+                AddressTestBuilder.builder().withId(2L).build().buildAddressDto()
         );
 
         when(addressRepository.findByUserId(userId)).thenReturn(addresses);
         when(addressMapper.toDto(any(Address.class))).thenAnswer(invocation -> {
             Address address = invocation.getArgument(0);
             return expectedDto.stream()
-                    .filter(dto -> dto.getId().equals(address.getId()))
+                    .filter((AddressDto dto) -> dto.getId().equals(address.getId()))
                     .findFirst()
                     .orElseThrow();
         });

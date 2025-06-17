@@ -5,6 +5,7 @@ import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public class UserTestBuilder {
+
     @Builder.Default
     private Long id = 5L;
 
