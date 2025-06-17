@@ -73,7 +73,49 @@ public class UserServiceImplTest {
         doThrow(EmptyResultDataAccessException.class).when(addressRepository).deleteById(id);
 
         assertThrows(EmptyResultDataAccessException.class, () -> userService.deleteAddressById(id));
-
         verify(addressRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void existsByLoginShouldReturnTrueWhenUserExists() {
+        String login = "test";
+
+        when(userRepository.existsByLogin(login)).thenReturn(true);
+
+        boolean result = userService.existsByLogin(login);
+
+        assertTrue(result);
+        verify(userRepository, times(1)).existsByLogin(login);
+    }
+
+    @Test
+    void existsByLoginShouldReturnFalseWhenUserDoesNotExist() {
+        String login = "test";
+
+        when(userRepository.existsByLogin(login)).thenReturn(false);
+
+        boolean result = userService.existsByLogin(login);
+
+        assertFalse(result);
+        verify(userRepository, times(1)).existsByLogin(login);
+    }
+
+    @Test
+    void deleteUserShouldInvokeRepositoryWhenUserExists() {
+        Long id = 3L;
+
+        userService.deleteUserById(id);
+
+        verify(userRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void deleteUserShouldThrowExceptionWhenUserDoesNotExist() {
+        Long id = 666L;
+
+        doThrow(EmptyResultDataAccessException.class).when(userRepository).deleteById(id);
+
+        assertThrows(EmptyResultDataAccessException.class, () -> userService.deleteUserById(id));
+        verify(userRepository, times(1)).deleteById(id);
     }
 }
