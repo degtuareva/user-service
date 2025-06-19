@@ -15,7 +15,8 @@ public class UserTestBuilder {
         user.setId(id);
         return user;
     }
-    public UserDto buildUserDto(){
+
+    public UserDto buildUserDto() {
         UserDto userDto = new UserDto();
         userDto.setId(id);
         return userDto;

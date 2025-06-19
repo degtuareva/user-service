@@ -44,10 +44,10 @@ public class UserServiceImplTest {
     private AddressRepository addressRepository;
 
     @Mock
-    private AddressMapper addressMapper;
+    private UserMapper userMapper;
 
     @Mock
-    private UserMapper userMapper;
+    private AddressMapper addressMapper;
 
     @InjectMocks
     private UserServiceImpl userService;
