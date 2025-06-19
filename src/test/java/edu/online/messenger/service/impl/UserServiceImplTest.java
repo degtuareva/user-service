@@ -1,8 +1,10 @@
 package edu.online.messenger.service.impl;
 
+import edu.online.messenger.exception.UserNotFoundException;
 import edu.online.messenger.mapper.AddressMapper;
+import edu.online.messenger.mapper.UserMapper;
 import edu.online.messenger.model.dto.AddressDto;
-import edu.online.messenger.model.dto.AddressDto;
+import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
@@ -18,13 +20,15 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,6 +45,9 @@ public class UserServiceImplTest {
 
     @Mock
     private AddressMapper addressMapper;
+
+    @Mock
+    private UserMapper userMapper;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -132,27 +139,31 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void findByIdShouldReturnTrueWhenUserExists() {
-        User user = UserTestBuilder.builder().withId(15L).build().buildUser();
+    void getUserByIdShouldReturnUserDtoWhenUserExists() {
+        Long userId = 5L;
+        User user = UserTestBuilder.builder().withId(userId).build().buildUser();
+        UserDto userDto = UserTestBuilder.builder().withId(userId).build().buildUserDto();
 
-        when(userRepository.existsById(user.getId())).thenReturn(true);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userMapper.toDto(user)).thenReturn(userDto);
 
-        boolean result = userService.existsById(user.getId());
+        UserDto result = userService.getUserById(userId);
 
-        assertTrue(result);
-        verify(userRepository, times(1)).existsById(user.getId());
+        assertNotNull(result);
+        assertEquals(userId, result.getId());
+        verify(userRepository, times(1)).findById(userId);
+        verify(userMapper, times(1)).toDto(user);
     }
 
     @Test
-    void findByIdShouldReturnFalseWhenUserDoesNotExist() {
-        Long userId = 500L;
+    void getUserByIdShouldThrowExceptionWhenUserDoesNotExist() {
+        Long userId = 666L;
 
-        when(userRepository.existsById(userId)).thenReturn(false);
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        boolean result = userService.existsById(userId);
-
-        assertFalse(result);
-        verify(userRepository, times(1)).existsById(userId);
+        assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
+        verify(userRepository, times(1)).findById(userId);
+        verify(userMapper, never()).toDto(any());
     }
 
     @Test
