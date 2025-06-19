@@ -2,6 +2,7 @@ package edu.online.messenger.service.impl;
 
 import edu.online.messenger.mapper.AddressMapper;
 import edu.online.messenger.model.dto.AddressDto;
+import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
@@ -13,13 +14,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -43,7 +47,7 @@ public class UserServiceImplTest {
 
     @Test
     void existsByIdShouldReturnTrueWhenUserExists() {
-        User user = UserTestBuilder.builder().withId(15L).build().buildUser();
+        User user = UserTestBuilder.builder().build().buildUser();
 
         when(userRepository.existsById(user.getId())).thenReturn(true);
 
@@ -55,6 +59,92 @@ public class UserServiceImplTest {
 
     @Test
     void existsByIdShouldReturnFalseWhenUserDoesNotExist() {
+        Long id = 15L;
+
+        when(userRepository.existsById(id)).thenReturn(false);
+
+        boolean result = userService.existsById(id);
+
+        assertFalse(result);
+        verify(userRepository, times(1)).existsById(id);
+    }
+
+    @Test
+    void deleteAddressByIdShouldInvokeRepositoryWhenAddressExists() {
+        Address address = AddressTestBuilder.builder().build().buildAddress();
+
+        userService.deleteAddressById(address.getId());
+
+        verify(addressRepository, times(1)).deleteById(address.getId());
+    }
+
+    @Test
+    void deleteAddressByIdShouldThrowExceptionWhenAddressNotFound() {
+        Long id = 30L;
+
+        doThrow(EmptyResultDataAccessException.class).when(addressRepository).deleteById(id);
+
+        assertThrows(EmptyResultDataAccessException.class, () -> userService.deleteAddressById(id));
+        verify(addressRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void existsByLoginShouldReturnTrueWhenUserExists() {
+        String login = "test";
+
+        when(userRepository.existsByLogin(login)).thenReturn(true);
+
+        boolean result = userService.existsByLogin(login);
+
+        assertTrue(result);
+        verify(userRepository, times(1)).existsByLogin(login);
+    }
+
+    @Test
+    void existsByLoginShouldReturnFalseWhenUserDoesNotExist() {
+        String login = "test";
+
+        when(userRepository.existsByLogin(login)).thenReturn(false);
+
+        boolean result = userService.existsByLogin(login);
+
+        assertFalse(result);
+        verify(userRepository, times(1)).existsByLogin(login);
+    }
+
+    @Test
+    void deleteUserShouldInvokeRepositoryWhenUserExists() {
+        Long id = 3L;
+
+        userService.deleteUserById(id);
+
+        verify(userRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void deleteUserShouldThrowExceptionWhenUserDoesNotExist() {
+        Long id = 666L;
+
+        doThrow(EmptyResultDataAccessException.class).when(userRepository).deleteById(id);
+
+        assertThrows(EmptyResultDataAccessException.class, () -> userService.deleteUserById(id));
+        verify(userRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void findByIdShouldReturnTrueWhenUserExists() {
+        User user = UserTestBuilder.builder().withId(15L).build().buildUser();
+
+        when(userRepository.existsById(user.getId())).thenReturn(true);
+
+        boolean result = userService.existsById(user.getId());
+
+        assertTrue(result);
+        verify(userRepository, times(1)).existsById(user.getId());
+    }
+
+    @Test
+    void findByIdShouldReturnFalseWhenUserDoesNotExist() {
         Long userId = 500L;
 
         when(userRepository.existsById(userId)).thenReturn(false);
