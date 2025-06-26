@@ -1,5 +1,6 @@
 package edu.online.messenger.util;
 
+import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.entity.User;
 import lombok.Builder;
 
@@ -13,5 +14,11 @@ public class UserTestBuilder {
         User user = new User();
         user.setId(id);
         return user;
+    }
+
+    public UserDto buildUserDto() {
+        UserDto userDto = new UserDto();
+        userDto.setId(id);
+        return userDto;
     }
 }
