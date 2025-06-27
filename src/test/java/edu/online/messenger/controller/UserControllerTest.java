@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,11 +18,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = {
-        "classpath:sql/users/test_data.sql",
-        "classpath:sql/addresses/test_data.sql"
-})
-public class UserControllerIntegrationTest extends AbstractIntegrationTest {
+@ActiveProfiles("test")
+@Testcontainers
+@Sql(scripts = "/sql/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+public class UserControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,7 +40,7 @@ public class UserControllerIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void addAddressByUserId_ShouldCreateAddress_WhenValidRequest() throws Exception {
+    void addAddressByUserIdShouldCreateAddressWhenValidRequest() throws Exception {
         String addressJson = "{\"userId\":5,\"country\":\"Russia\",\"city\":\"Moscow\",\"street\":\"Lenina\",\"postalCode\":\"123456\",\"house\":1,\"housing\":\"A\",\"apartment\":10}";
         mockMvc.perform(post("/api/users/address")
                         .contentType(MediaType.APPLICATION_JSON)
