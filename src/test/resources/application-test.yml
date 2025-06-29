@@ -9,7 +9,7 @@ spring:
           format_sql: true
   liquibase:
     enabled: true
-    change-log: classpath:changelog-master.xml
+    change-log: classpath:changelog-test/changelog-master-test.xml
     drop-first: true
 
 logging:
