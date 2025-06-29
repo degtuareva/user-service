@@ -1,11 +1,9 @@
 package edu.online.messenger.controller;
 
 import edu.online.messenger.config.AbstractIntegrationTest;
-import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
-import edu.online.messenger.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
+import edu.online.messenger.util.UserTestBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,28 +25,17 @@ public class UserControllerTest extends AbstractIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private AddressRepository addressRepository;
 
-    private User testUser;
-
-    private Address testAddress;
-
-    @BeforeEach
-    void setup() {
-        testUser = userRepository.findById(5L).orElseThrow();
-        testAddress = addressRepository.findById(10L).orElseThrow();
-    }
+    private final User testUser = UserTestBuilder.builder().withId(5L).build().buildUser();
 
     @Test
     void getUserByIdShouldReturnUserWhenUserExists() throws Exception {
         mockMvc.perform(get("/api/users/{id}", testUser.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testUser.getId()))
-                .andExpect(jsonPath("$.login").value(testUser.getLogin()));
+                .andExpect(jsonPath("$.id").value(5))
+                .andExpect(jsonPath("$.login").value("testLogin"));
     }
 
     @Test
@@ -64,13 +51,13 @@ public class UserControllerTest extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].street").value(testAddress.getStreet()))
-                .andExpect(jsonPath("$[0].city").value(testAddress.getCity()))
-                .andExpect(jsonPath("$[0].house").value(testAddress.getHouse()))
-                .andExpect(jsonPath("$[0].postalCode").value(testAddress.getPostalCode()))
-                .andExpect(jsonPath("$[0].country").value(testAddress.getCountry()))
-                .andExpect(jsonPath("$[0].housing").value(testAddress.getHousing()))
-                .andExpect(jsonPath("$[0].apartment").value(testAddress.getApartment()));
+                .andExpect(jsonPath("$[0].street").value("testStreet"))
+                .andExpect(jsonPath("$[0].city").value("testCity"))
+                .andExpect(jsonPath("$[0].house").value(1))
+                .andExpect(jsonPath("$[0].postalCode").value("testPostalCode"))
+                .andExpect(jsonPath("$[0].country").value("testCountry"))
+                .andExpect(jsonPath("$[0].housing").value("testHousing"))
+                .andExpect(jsonPath("$[0].apartment").value(1));
     }
 
     @Test
