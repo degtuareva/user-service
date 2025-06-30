@@ -1,0 +1,19 @@
+spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:changelog-test/changelog-master-test.xml
+    drop-first: true
+
+logging:
+  level:
+    root: INFO
+    edu.online.messenger: DEBUG
+    org.springframework: WARN
