@@ -1,8 +1,10 @@
 package edu.online.messenger.controller;
 
 import edu.online.messenger.config.AbstractIntegrationTest;
+import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.repository.AddressRepository;
+import edu.online.messenger.util.AddressTestBuilder;
 import edu.online.messenger.util.UserTestBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,6 +33,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     private AddressRepository addressRepository;
 
     private final User testUser = UserTestBuilder.builder().withId(5L).build().buildUser();
+    private final Address testAddress = AddressTestBuilder.builder().withId(10L).build().buildAddress();
 
     @Test
     void getUserByIdShouldReturnUserWhenUserExists() throws Exception {
@@ -67,5 +73,39 @@ public class UserControllerTest extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(0));
+    }
+
+    @Test
+    void existsByIdShouldReturnTrueWhenUserExists() throws Exception {
+        mockMvc.perform(get("/api/users/existence/id/{userId}", testUser.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
+
+    @Test
+    void existsByIdShouldReturnFalseWhenUserDoesNotExist() throws Exception {
+        mockMvc.perform(get("/api/users/existence/id/{userId}", 333L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("false"));
+    }
+
+    @Test
+    void deleteAddressShouldReturnNoContentWhenAddressExists() throws Exception {
+        assertThat(addressRepository.existsById(testAddress.getId())).isTrue();
+
+        mockMvc.perform(delete("/api/users/address/{id}", testAddress.getId()))
+                .andExpect(status().isNoContent());
+
+        assertThat(addressRepository.existsById(testAddress.getId())).isFalse();
+    }
+
+    @Test
+    void deleteAddressByIdShouldReturnNoContentWhenAddressDoesNotExist() throws Exception {
+        assertThat(addressRepository.existsById(333L)).isFalse();
+
+        mockMvc.perform(delete("/api/users/address/{id}", 333L))
+                .andExpect(status().isNoContent());
     }
 }
