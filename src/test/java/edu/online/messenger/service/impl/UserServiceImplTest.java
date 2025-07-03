@@ -3,6 +3,7 @@ package edu.online.messenger.service.impl;
 import edu.online.messenger.exception.UserNotFoundException;
 import edu.online.messenger.mapper.AddressMapper;
 import edu.online.messenger.mapper.UserMapper;
+import edu.online.messenger.model.dto.AddressCreateDto;
 import edu.online.messenger.model.dto.AddressDto;
 import edu.online.messenger.model.dto.UserDto;
 import edu.online.messenger.model.entity.Address;
@@ -210,6 +211,75 @@ public class UserServiceImplTest {
         assertTrue(addressDtoList.isEmpty());
 
         verify(addressRepository, times(1)).findByUserId(userId);
+        verify(addressMapper, never()).toDto(any());
+    }
+
+    @Test
+    void getUserByLoginShouldReturnUserDtoWhenUserExists() {
+        String login = "testLogin";
+        User user = UserTestBuilder.builder().build().buildUser();
+        UserDto userDto = UserTestBuilder.builder().build().buildUserDto();
+
+        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+        when(userMapper.toDto(user)).thenReturn(userDto);
+
+        UserDto result = userService.getUserByLogin(login);
+
+        assertNotNull(result);
+        assertEquals(userDto.getId(), result.getId());
+        verify(userRepository, times(1)).findByLogin(login);
+        verify(userMapper, times(1)).toDto(user);
+    }
+
+    @Test
+    void getUserByLoginShouldThrowExceptionWhenUserDoesNotExist() {
+        String login = "notExist";
+
+        when(userRepository.findByLogin(login)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.getUserByLogin(login));
+        verify(userRepository, times(1)).findByLogin(login);
+        verify(userMapper, never()).toDto(any());
+    }
+
+    @Test
+    void addAddressByUserIdShouldAddAddressWhenUserExists() {
+        Long userId = 5L;
+        AddressCreateDto addressCreateDto = new AddressCreateDto();
+        addressCreateDto.setUserId(userId);
+
+        User user = UserTestBuilder.builder().withId(userId).build().buildUser();
+        Address address = AddressTestBuilder.builder().build().buildAddress();
+        Address savedAddress = AddressTestBuilder.builder().withId(123L).build().buildAddress();
+        AddressDto addressDto = AddressTestBuilder.builder().withId(123L).build().buildAddressDto();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(addressMapper.toEntity(addressCreateDto)).thenReturn(address);
+        when(addressRepository.save(address)).thenReturn(savedAddress);
+        when(addressMapper.toDto(savedAddress)).thenReturn(addressDto);
+
+        AddressDto result = userService.addAddressByUserId(addressCreateDto);
+
+        assertNotNull(result);
+        assertEquals(addressDto.getId(), result.getId());
+        verify(userRepository, times(1)).findById(userId);
+        verify(addressMapper, times(1)).toEntity(addressCreateDto);
+        verify(addressRepository, times(1)).save(address);
+        verify(addressMapper, times(1)).toDto(savedAddress);
+    }
+
+    @Test
+    void addAddressByUserIdShouldThrowExceptionWhenUserDoesNotExist() {
+        Long userId = 999L;
+        AddressCreateDto addressCreateDto = new AddressCreateDto();
+        addressCreateDto.setUserId(userId);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.addAddressByUserId(addressCreateDto));
+        verify(userRepository, times(1)).findById(userId);
+        verify(addressMapper, never()).toEntity(any());
+        verify(addressRepository, never()).save(any());
         verify(addressMapper, never()).toDto(any());
     }
 }
