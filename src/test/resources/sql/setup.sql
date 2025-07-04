@@ -1,5 +1,7 @@
-DELETE FROM address;
-DELETE FROM users;
+DELETE
+FROM address;
+DELETE
+FROM users;
 
 INSERT INTO users (id, login, password, role)
 VALUES (5, 'testLogin', 'testPassword', 'USER');
