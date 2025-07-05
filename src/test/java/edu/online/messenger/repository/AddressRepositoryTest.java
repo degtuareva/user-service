@@ -5,6 +5,7 @@ import edu.online.messenger.model.entity.Address;
 import edu.online.messenger.model.entity.User;
 import edu.online.messenger.util.AddressTestBuilder;
 import edu.online.messenger.util.UserTestBuilder;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
+@Transactional
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql(scripts = "/sql/setup.sql")
 public class AddressRepositoryTest extends AbstractIntegrationTest {
@@ -23,11 +25,11 @@ public class AddressRepositoryTest extends AbstractIntegrationTest {
     @Autowired
     private AddressRepository addressRepository;
 
-    private final User testUser = UserTestBuilder.builder().withId(5L).build().buildUser();
-    private final Address testAddress = AddressTestBuilder.builder().withId(10L).build().buildAddress();
-
     @Test
     void findByUserIdShouldReturnListOfAddresses() {
+        User testUser = UserTestBuilder.builder().withId(5L).build().buildUser();
+        Address testAddress = AddressTestBuilder.builder().withId(10L).build().buildAddress();
+
         List<Address> addresses = addressRepository.findByUserId(testUser.getId());
 
         assertThat(addresses).hasSize(1);
@@ -44,6 +46,7 @@ public class AddressRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     void findByUserIdShouldReturnEmptyListWhenUserHaveNoAddresses() {
+        User testUser = UserTestBuilder.builder().withId(5L).build().buildUser();
         addressRepository.deleteAll();
 
         List<Address> addresses = addressRepository.findByUserId(testUser.getId());
