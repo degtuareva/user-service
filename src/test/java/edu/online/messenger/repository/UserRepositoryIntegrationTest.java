@@ -32,8 +32,12 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testExistsByLogin() {
+    void shouldReturnTrueWhenLoginExists() {
         assertThat(userRepository.existsByLogin("oldUser")).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseWhenLoginDoesNotExist() {
         assertThat(userRepository.existsByLogin("nonexistent")).isFalse();
     }
 
