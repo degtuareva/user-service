@@ -20,7 +20,7 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
     private UserRepository userRepository;
 
     @Test
-    void testFindByLastVisitDateBefore() {
+    void shouldReturnOnlyUsersWithLastVisitBeforeThreshold() {
         LocalDateTime threshold = LocalDateTime.of(2025, 6, 5, 0, 0);
 
         List<User> usersBeforeThreshold = userRepository.findByLastVisitDateBefore(threshold);
@@ -42,7 +42,7 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testFindByLogin() {
+    void shouldReturnUserWhenLoginExists() {
         Optional<User> found = userRepository.findByLogin("oldUser");
         Optional<User> notFound = userRepository.findByLogin("nonexistent");
 
@@ -52,7 +52,7 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testSaveAndFindById() {
+    void shouldSaveUserAndFindById() {
         User user = new User();
         user.setLogin("integrationTestUser");
         user.setPassword("password");
