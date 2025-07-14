@@ -3,6 +3,7 @@ package edu.online.messenger.repository;
 import edu.online.messenger.config.AbstractIntegrationTest;
 import edu.online.messenger.constant.RoleName;
 import edu.online.messenger.model.entity.User;
+import edu.online.messenger.util.UserTestBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,11 +54,13 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void shouldSaveUserAndFindById() {
-        User user = new User();
-        user.setLogin("integrationTestUser");
-        user.setPassword("password");
-        user.setRole(RoleName.USER);
-        user.setLastVisitDate(LocalDateTime.now().minusDays(1));
+        User user = UserTestBuilder.builder()
+                .withLogin("integrationTestUser")
+                .withPassword("password")
+                .withRole(RoleName.USER)
+                .withLastVisitDate(LocalDateTime.now().minusDays(1))
+                .build()
+                .buildUser();
 
         User savedUser = userRepository.save(user);
 
