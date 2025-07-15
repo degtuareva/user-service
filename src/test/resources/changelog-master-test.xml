@@ -1,0 +1,9 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <include file="/changelog-test/06.07.2025/create-table-users.xml"/>
+    <include file="/changelog-test/05.07.2025/create-table-address.xml"/>
+    <include file="/changelog-test/07.07.2025/insert-test-data.xml"/>
+</databaseChangeLog>
