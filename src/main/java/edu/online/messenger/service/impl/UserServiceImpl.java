@@ -1,5 +1,6 @@
 package edu.online.messenger.service.impl;
 
+import edu.online.messenger.exception.InvalidDataException;
 import edu.online.messenger.exception.UserNotFoundException;
 import edu.online.messenger.mapper.AddressMapper;
 import edu.online.messenger.mapper.UserMapper;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService {
     private final AddressRepository addressRepository;
     private final UserMapper userMapper;
     private final AddressMapper addressMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public boolean existsById(Long id) {
@@ -110,6 +113,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto save(UserInfoDto userInfoDto) {
         log.info("Создание пользователя : {}", userInfoDto);
+        if (userInfoDto.getPassword() == null || userInfoDto.getPassword().length() < 6) {
+            throw new InvalidDataException("Пароль должен содержать минимум 6 символов");
+        }
+        userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
         return userMapper.toDto(userRepository.save(userMapper.toUser(userInfoDto)));
     }
 

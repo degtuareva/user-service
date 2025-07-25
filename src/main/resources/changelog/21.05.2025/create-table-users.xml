@@ -31,4 +31,13 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="20250723-01-increase-password-length" author="lvergunov">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="users"/>
+                <columnExists tableName="users" columnName="password"/>
+            </and>
+        </preConditions>
+        <modifyDataType tableName="users" columnName="password" newDataType="character varying(255)"/>
+    </changeSet>
 </databaseChangeLog>
