@@ -113,9 +113,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto save(UserInfoDto userInfoDto) {
         log.info("Создание пользователя : {}", userInfoDto);
-        if (userInfoDto.getPassword() == null || userInfoDto.getPassword().length() < 6) {
-            throw new InvalidDataException("Пароль должен содержать минимум 6 символов");
-        }
         userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
         return userMapper.toDto(userRepository.save(userMapper.toUser(userInfoDto)));
     }
